@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, MapPin, XCircle, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, MapPin, XCircle, CheckCircle, Award, TrendingUp } from 'lucide-react';
 import { api } from '../api/apiFactory';
 import { useAuth } from '../contexts/AuthContext';
 import type { Booking, GymFlowClass } from '../types';
@@ -265,25 +265,86 @@ export default function DashboardPage() {
 
                     {pastBookings.length > 0 && (
                         <section>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Past Classes</h2>
-                            <div className="space-y-4">
-                                {pastBookings.map((booking) => (
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center space-x-3">
+                                    <Award className="h-8 w-8 text-orange-600" />
+                                    <h2 className="text-2xl font-bold text-gray-900">Class History</h2>
+                                </div>
+                                <div className="flex items-center space-x-2 bg-gradient-to-r from-orange-100 to-orange-50 px-4 py-2 rounded-lg">
+                                    <TrendingUp className="h-5 w-5 text-orange-600" />
+                                    <span className="text-sm font-semibold text-orange-900">
+                                        {pastBookings.length} Classes Completed
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {pastBookings.map((booking, index) => (
                                     <div
                                         key={booking.id}
-                                        className="bg-white rounded-2xl p-6 shadow-lg flex items-center justify-between"
+                                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all group"
                                     >
-                                        <div className="flex items-center space-x-4">
-                                            <CheckCircle className="h-8 w-8 text-green-500" />
-                                            <div>
-                                                <h3 className="text-lg font-bold text-gray-900">
-                                                    {booking.class?.name}
-                                                </h3>
-                                                <p className="text-gray-600">
-                                                    {booking.class?.time} • {booking.class?.instructor}
-                                                </p>
+                                        {booking.class && (
+                                            <div className="relative h-40 overflow-hidden">
+                                                <img
+                                                    src={booking.class.imageUrl}
+                                                    alt={booking.class.name}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                                <div className="absolute top-3 right-3">
+                                                    <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1">
+                                                        <CheckCircle className="h-3 w-3" />
+                                                        <span>Completed</span>
+                                                    </div>
+                                                </div>
+                                                <div className="absolute bottom-3 left-3 right-3">
+                                                    <h3 className="text-white font-bold text-lg leading-tight">
+                                                        {booking.class.name}
+                                                    </h3>
+                                                </div>
                                             </div>
+                                        )}
+                                        <div className="p-5">
+                                            <div className="space-y-2 mb-4">
+                                                {booking.class?.instructor && (
+                                                    <div className="flex items-center text-gray-600 text-sm">
+                                                        <div className="w-2 h-2 bg-orange-600 rounded-full mr-2"></div>
+                                                        <span className="font-medium">{booking.class.instructor}</span>
+                                                    </div>
+                                                )}
+                                                <div className="flex items-center text-gray-600 text-sm">
+                                                    <Calendar className="h-4 w-4 text-orange-600 mr-2" />
+                                                    <span>
+                                                        {new Date(booking.classSession?.date || booking.bookingDate).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </span>
+                                                </div>
+                                                {booking.class?.duration && (
+                                                    <div className="flex items-center text-gray-600 text-sm">
+                                                        <Clock className="h-4 w-4 text-orange-600 mr-2" />
+                                                        <span>{formatDuration(booking.class.duration)}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {booking.class?.category && (
+                                                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                                                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                                        {booking.class.category}
+                                                    </span>
+                                                    {booking.class?.id && (
+                                                        <Link
+                                                            to={`/class/${booking.class.id}`}
+                                                            className="text-xs font-semibold text-orange-600 hover:text-orange-700 transition-colors"
+                                                        >
+                                                            Book Again →
+                                                        </Link>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
-                                        <span className="text-gray-500 font-semibold">Completed</span>
                                     </div>
                                 ))}
                             </div>
