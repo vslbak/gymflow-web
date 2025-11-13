@@ -18,6 +18,7 @@ export interface GymFlowClass {
   location: string;
   description: string;
   price: number;
+  time: string;
   serviceFee: number;
   whatToBring?: string[];
 }
@@ -26,7 +27,6 @@ export interface ClassSession {
   id: string;
   classId: string;
   date: string;
-  time: string;
   spotsLeft: number;
 }
 
