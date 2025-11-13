@@ -46,7 +46,7 @@ export default function DashboardPage() {
         };
 
         fetchBookings();
-    }, [user]);
+    }, [user, api]);
 
     const handleCancelBooking = async (bookingId: string) => {
         if (!confirm('Are you sure you want to cancel this booking?')) return;
@@ -64,33 +64,33 @@ export default function DashboardPage() {
     };
 
     const normalizeStatus = (status: Booking['status']): string => {
-        return status.toLowerCase();
+        return status.toUpperCase();
     };
 
     const getBookingDate = (booking: Booking): Date => {
-        const dateStr = booking.bookingDate || booking.classSession?.date || booking.createdAt;
+        const dateStr = booking.classSession?.date || booking.bookingDate || booking.createdAt;
         return new Date(dateStr);
     };
 
     const upcomingBookings = bookings.filter((b) => {
         const status = normalizeStatus(b.status);
         const bookingDate = getBookingDate(b);
-        return (status === 'confirmed' || status === 'pending') && bookingDate > new Date();
+        return (status === 'CONFIRMED' || status === 'PENDING') && bookingDate > new Date();
     });
 
     const pastBookings = bookings.filter((b) => {
         const status = normalizeStatus(b.status);
         const bookingDate = getBookingDate(b);
-        return status === 'confirmed' && bookingDate <= new Date();
+        return status === 'CONFIRMED' && bookingDate <= new Date();
     });
 
-    const cancelledBookings = bookings.filter((b) => normalizeStatus(b.status) === 'cancelled');
+    const cancelledBookings = bookings.filter((b) => normalizeStatus(b.status) === 'CANCELLED');
 
-    const pendingBookings = bookings.filter((b) => normalizeStatus(b.status) === 'pending');
-    const confirmedBookings = bookings.filter((b) => normalizeStatus(b.status) === 'confirmed');
+    const pendingBookings = bookings.filter((b) => normalizeStatus(b.status) === 'PENDING');
+    const confirmedBookings = bookings.filter((b) => normalizeStatus(b.status) === 'CONFIRMED');
 
     const totalSpent = bookings
-        .filter((b) => normalizeStatus(b.status) !== 'cancelled')
+        .filter((b) => normalizeStatus(b.status) !== 'CANCELLED')
         .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
 
     const thisMonthBookings = bookings.filter((b) => {
@@ -99,7 +99,7 @@ export default function DashboardPage() {
         return (
             bookingDate.getMonth() === now.getMonth() &&
             bookingDate.getFullYear() === now.getFullYear() &&
-            normalizeStatus(b.status) !== 'cancelled'
+            normalizeStatus(b.status) !== 'CANCELLED'
         );
     });
 
@@ -173,10 +173,10 @@ export default function DashboardPage() {
                                 {upcomingBookings.map((booking) => {
                                     const status = normalizeStatus(booking.status);
                                     const statusConfig = {
-                                        confirmed: { bg: 'bg-green-100', text: 'text-green-800', label: 'Confirmed' },
-                                        pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pending' },
+                                        CONFIRMED: { bg: 'bg-green-100', text: 'text-green-800', label: 'Confirmed' },
+                                        PENDING: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pending' },
                                     };
-                                    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
+                                    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.PENDING;
 
                                     return (
                                         <div
