@@ -48,9 +48,7 @@ export default function AdminClassesPage() {
   const fetchClasses = async () => {
     try {
       const res = await api.getClasses();
-      console.log('Fetched classes response:', res);
       if (res.success && res.data) {
-        console.log('First class daysOfWeek:', res.data[0]?.daysOfWeek);
         setClasses(res.data);
       }
     } catch (err) {
@@ -82,11 +80,6 @@ export default function AdminClassesPage() {
 
   const handleOpenEdit = (cls: GymFlowClass) => {
     setEditingClass(cls);
-    console.log('Opening edit for class:', cls.name);
-    console.log('Full class object:', cls);
-    console.log('daysOfWeek from class:', cls.daysOfWeek);
-    console.log('Type of daysOfWeek:', typeof cls.daysOfWeek);
-    console.log('Is array:', Array.isArray(cls.daysOfWeek));
     const newFormData = {
       name: cls.name,
       instructor: cls.instructor,
@@ -102,7 +95,6 @@ export default function AdminClassesPage() {
       daysOfWeek: cls.daysOfWeek || [],
       whatToBring: cls.whatToBring || [],
     };
-    console.log('Setting formData.daysOfWeek to:', newFormData.daysOfWeek);
     setFormData(newFormData);
     setShowModal(true);
   };
@@ -437,7 +429,6 @@ export default function AdminClassesPage() {
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
                       const dayLower = day.toLowerCase();
                       const isChecked = formData.daysOfWeek?.some(d => d.toLowerCase() === dayLower) || false;
-                      console.log(`Day: ${day}, formData.daysOfWeek:`, formData.daysOfWeek, 'isChecked:', isChecked);
                       return (
                         <label key={day} className="flex items-center space-x-2 cursor-pointer">
                           <input
