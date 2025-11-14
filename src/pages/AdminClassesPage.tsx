@@ -83,7 +83,10 @@ export default function AdminClassesPage() {
   const handleOpenEdit = (cls: GymFlowClass) => {
     setEditingClass(cls);
     console.log('Opening edit for class:', cls.name);
+    console.log('Full class object:', cls);
     console.log('daysOfWeek from class:', cls.daysOfWeek);
+    console.log('Type of daysOfWeek:', typeof cls.daysOfWeek);
+    console.log('Is array:', Array.isArray(cls.daysOfWeek));
     const newFormData = {
       name: cls.name,
       instructor: cls.instructor,

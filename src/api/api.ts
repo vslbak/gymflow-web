@@ -23,25 +23,6 @@ export class GymFlowApi implements GymFlowApiContract {
     return localStorage.getItem('token');
   }
 
-  private transformClass(obj: any): GymFlowClass {
-    return {
-      id: obj.id,
-      name: obj.name,
-      instructor: obj.instructor,
-      duration: obj.duration,
-      totalSpots: obj.total_spots ?? obj.totalSpots,
-      imageUrl: obj.image_url ?? obj.imageUrl,
-      category: obj.category,
-      level: obj.level,
-      location: obj.location,
-      description: obj.description,
-      price: obj.price,
-      time: obj.time,
-      daysOfWeek: obj.days_of_week ?? obj.daysOfWeek ?? [],
-      whatToBring: obj.what_to_bring ?? obj.whatToBring ?? [],
-    };
-  }
-
   private async request<T>(
     endpoint: string,
     options?: RequestInit
@@ -84,14 +65,7 @@ export class GymFlowApi implements GymFlowApiContract {
   }
 
   async getClasses(): Promise<ApiResponse<GymFlowClass[]>> {
-    const result = await this.request<any[]>('/classes');
-    if (result.success && result.data) {
-      return {
-        success: true,
-        data: result.data.map(cls => this.transformClass(cls)),
-      };
-    }
-    return result as ApiResponse<GymFlowClass[]>;
+    return this.request<GymFlowClass[]>('/classes');
   }
 
   async getClassSessions(): Promise<ApiResponse<ClassSession[]>> {
