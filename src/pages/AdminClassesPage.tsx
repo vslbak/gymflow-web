@@ -252,7 +252,7 @@ export default function AdminClassesPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div key={editingClass?.id || 'new'} className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900">
                 {editingClass ? 'Edit Class' : 'Create New Class'}
@@ -429,12 +429,13 @@ export default function AdminClassesPage() {
                       <label key={day} className="flex items-center space-x-2 cursor-pointer">
                         <input
                           type="checkbox"
-                          checked={formData.daysOfWeek.includes(day)}
+                          checked={formData.daysOfWeek?.includes(day) || false}
                           onChange={(e) => {
+                            const currentDays = formData.daysOfWeek || [];
                             if (e.target.checked) {
-                              setFormData({ ...formData, daysOfWeek: [...formData.daysOfWeek, day] });
+                              setFormData({ ...formData, daysOfWeek: [...currentDays, day] });
                             } else {
-                              setFormData({ ...formData, daysOfWeek: formData.daysOfWeek.filter(d => d !== day) });
+                              setFormData({ ...formData, daysOfWeek: currentDays.filter(d => d !== day) });
                             }
                           }}
                           className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
