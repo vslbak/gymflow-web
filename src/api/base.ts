@@ -15,6 +15,38 @@ export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
+export interface CreateClassRequest {
+  name: string;
+  instructor: string;
+  duration: string;
+  totalSpots: number;
+  imageUrl: string;
+  category: string;
+  level: string;
+  location: string;
+  description: string;
+  price: number;
+  whatToBring: string[];
+}
+
+export interface UpdateClassRequest extends Partial<CreateClassRequest> {
+  id: string;
+}
+
+export interface CreateSessionRequest {
+  classId: string;
+  date: string;
+  time: string;
+  spotsLeft: number;
+}
+
+export interface UpdateSessionRequest {
+  id: string;
+  date?: string;
+  time?: string;
+  spotsLeft?: number;
+}
+
 export interface GymFlowApiContract {
   getClasses(): Promise<ApiResponse<GymFlowClass[]>>;
 
@@ -37,4 +69,16 @@ export interface GymFlowApiContract {
   getUserBookings(): Promise<ApiResponse<Booking[]>>;
 
   cancelBooking(bookingId: string): Promise<ApiResponse<void>>;
+
+  createClass(request: CreateClassRequest): Promise<ApiResponse<GymFlowClass>>;
+
+  updateClass(request: UpdateClassRequest): Promise<ApiResponse<GymFlowClass>>;
+
+  deleteClass(classId: string): Promise<ApiResponse<void>>;
+
+  createSession(request: CreateSessionRequest): Promise<ApiResponse<ClassSession>>;
+
+  updateSession(request: UpdateSessionRequest): Promise<ApiResponse<ClassSession>>;
+
+  deleteSession(sessionId: string): Promise<ApiResponse<void>>;
 }

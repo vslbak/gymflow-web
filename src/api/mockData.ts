@@ -10,7 +10,14 @@ import type {
     BookingResponse,
     ApiResponse,
 } from '../types';
-import type { GymFlowApiContract, RefreshTokenRequest } from './base';
+import type {
+    GymFlowApiContract,
+    RefreshTokenRequest,
+    CreateClassRequest,
+    UpdateClassRequest,
+    CreateSessionRequest,
+    UpdateSessionRequest
+} from './base';
 
 const mockGymFlowClasses: GymFlowClass[] = [
     {
@@ -799,6 +806,178 @@ export class MockGymFlowApi implements GymFlowApiContract {
         if (session) {
             session.spotsLeft += 1;
         }
+
+        return {
+            success: true,
+        };
+    }
+
+    async createClass(request: CreateClassRequest): Promise<ApiResponse<GymFlowClass>> {
+        await delay(500);
+
+        const newClass: GymFlowClass = {
+            id: 'class-' + (mockGymFlowClasses.length + 1),
+            ...request,
+            time: '00:00',
+        };
+
+        mockGymFlowClasses.push(newClass);
+
+        return {
+            success: true,
+            data: newClass,
+        };
+    }
+
+    async updateClass(request: UpdateClassRequest): Promise<ApiResponse<GymFlowClass>> {
+        await delay(500);
+
+        const classIndex = mockGymFlowClasses.findIndex((c) => c.id === request.id);
+
+        if (classIndex === -1) {
+            return {
+                success: false,
+                error: 'Class not found',
+            };
+        }
+
+        mockGymFlowClasses[classIndex] = {
+            ...mockGymFlowClasses[classIndex],
+            ...request,
+        };
+
+        return {
+            success: true,
+            data: mockGymFlowClasses[classIndex],
+        };
+    }
+
+    async deleteClass(classId: string): Promise<ApiResponse<void>> {
+        await delay(500);
+
+        const classIndex = mockGymFlowClasses.findIndex((c) => c.id === classId);
+
+        if (classIndex === -1) {
+            return {
+                success: false,
+                error: 'Class not found',
+            };
+        }
+
+        mockGymFlowClasses.splice(classIndex, 1);
+
+        const sessionsToDelete = mockClassSessions.filter((s) => s.classId === classId);
+        sessionsToDelete.forEach((session) => {
+            const index = mockClassSessions.findIndex((s) => s.id === session.id);
+            if (index !== -1) {
+                mockClassSessions.splice(index, 1);
+            }
+        });
+
+        return {
+            success: true,
+        };
+    }
+
+    async createSession(request: CreateSessionRequest): Promise<ApiResponse<ClassSession>> {
+        await delay(500);
+
+        const classItem = mockGymFlowClasses.find((c) => c.id === request.classId);
+
+        if (!classItem) {
+            return {
+                success: false,
+                error: 'Class not found',
+            };
+        }
+
+        const newSessionId = 'session-' + (mockClassSessions.length + 1);
+        const newSession = {
+            id: newSessionId,
+            classId: request.classId,
+            date: request.date,
+            time: request.time,
+            spotsLeft: request.spotsLeft,
+        };
+
+        mockClassSessions.push(newSession);
+
+        const enriched = enrichSessionForBooking(newSessionId);
+
+        if (!enriched) {
+            return {
+                success: false,
+                error: 'Failed to create session',
+            };
+        }
+
+        return {
+            success: true,
+            data: enriched,
+        };
+    }
+
+    async updateSession(request: UpdateSessionRequest): Promise<ApiResponse<ClassSession>> {
+        await delay(500);
+
+        const sessionIndex = mockClassSessions.findIndex((s) => s.id === request.id);
+
+        if (sessionIndex === -1) {
+            return {
+                success: false,
+                error: 'Session not found',
+            };
+        }
+
+        if (request.date !== undefined) {
+            mockClassSessions[sessionIndex].date = request.date;
+        }
+        if (request.time !== undefined) {
+            mockClassSessions[sessionIndex].time = request.time;
+        }
+        if (request.spotsLeft !== undefined) {
+            mockClassSessions[sessionIndex].spotsLeft = request.spotsLeft;
+        }
+
+        const enriched = enrichSessionForBooking(request.id);
+
+        if (!enriched) {
+            return {
+                success: false,
+                error: 'Failed to update session',
+            };
+        }
+
+        return {
+            success: true,
+            data: enriched,
+        };
+    }
+
+    async deleteSession(sessionId: string): Promise<ApiResponse<void>> {
+        await delay(500);
+
+        const sessionIndex = mockClassSessions.findIndex((s) => s.id === sessionId);
+
+        if (sessionIndex === -1) {
+            return {
+                success: false,
+                error: 'Session not found',
+            };
+        }
+
+        const hasBookings = mockBookings.some(
+            (b) => b.sessionId === sessionId && b.status === 'CONFIRMED'
+        );
+
+        if (hasBookings) {
+            return {
+                success: false,
+                error: 'Cannot delete session with confirmed bookings',
+            };
+        }
+
+        mockClassSessions.splice(sessionIndex, 1);
 
         return {
             success: true,

@@ -12,7 +12,7 @@ import SignupPage from './pages/SignupPage';
 import ClassPage from './pages/ClassPage';
 import DashboardPage from './pages/DashboardPage';
 import BookingSuccessPage from './pages/BookingSuccessPage';
-import AdminPage from './pages/AdminPage';
+import AdminDashboardLayout from './pages/AdminDashboardLayout';
 
 function HomePage() {
     return (
@@ -37,7 +37,9 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/class/:id" element={<ClassPage />} />
                         <Route path="/dashboard" element={<DashboardPage />} />
-                        <Route path="/admin" element={<AdminPage />} />
+                        <Route path="/admin" element={<AdminDashboardLayout />} />
+                        <Route path="/admin/classes" element={<AdminDashboardLayout />} />
+                        <Route path="/admin/sessions" element={<AdminDashboardLayout />} />
                         <Route path="/schedule" element={<ClassesPage />} />
                         <Route path="/booking/success" element={<BookingSuccessPage />} />
                     </Routes>
