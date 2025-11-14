@@ -31,11 +31,11 @@ export default function Navbar() {
               <>
                 {user?.role === 'ADMIN' && (
                   <Link
-                    to="/admin"
+                    to="/classes/manage"
                     className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
                   >
                     <Shield className="h-5 w-5" />
-                    <span>Admin</span>
+                    <span>Manage Classes</span>
                   </Link>
                 )}
                 <Link
