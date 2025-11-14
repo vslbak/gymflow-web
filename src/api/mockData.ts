@@ -14,9 +14,7 @@ import type {
     GymFlowApiContract,
     RefreshTokenRequest,
     CreateClassRequest,
-    UpdateClassRequest,
-    CreateSessionRequest,
-    UpdateSessionRequest
+    UpdateClassRequest
 } from './base';
 
 const mockGymFlowClasses: GymFlowClass[] = [
@@ -32,6 +30,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Studio A, 2nd Floor',
         description: 'An energizing yoga flow that builds strength, flexibility, and mindfulness. Perfect for intermediate practitioners looking to deepen their practice.',
         price: 25,
+        time: '18:00',
+        daysOfWeek: ['Monday', 'Wednesday', 'Friday'],
         whatToBring: ['Yoga mat', 'Water bottle', 'Comfortable athletic wear', 'Towel'],
     },
     {
@@ -46,6 +46,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Main Gym Floor',
         description: 'High-intensity interval training designed to maximize calorie burn and boost your metabolism. Get ready to sweat!',
         price: 30,
+        time: '07:30',
+        daysOfWeek: ['Tuesday', 'Thursday', 'Saturday'],
         whatToBring: ['Water bottle', 'Towel', 'Athletic shoes', 'Heart rate monitor (optional)'],
     },
     {
@@ -60,6 +62,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Weight Room',
         description: 'Build lean muscle and increase your overall strength with progressive resistance training. Suitable for all fitness levels.',
         price: 25,
+        time: '17:00',
+        daysOfWeek: ['Monday', 'Wednesday', 'Friday'],
         whatToBring: ['Water bottle', 'Towel', 'Weight lifting gloves (optional)', 'Athletic shoes'],
     },
     {
@@ -74,6 +78,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Spin Studio',
         description: 'An intense cycling workout set to energizing music. Push your limits and burn calories in this high-energy class.',
         price: 28,
+        time: '08:00',
+        daysOfWeek: ['Tuesday', 'Thursday', 'Sunday'],
         whatToBring: ['Water bottle', 'Towel', 'Cycling shoes or sneakers', 'Padded shorts (optional)'],
     },
     {
@@ -88,6 +94,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Studio B, 2nd Floor',
         description: 'Focus on core strength, flexibility, and balance through controlled movements. Perfect for beginners and those recovering from injuries.',
         price: 22,
+        time: '09:00',
+        daysOfWeek: ['Monday', 'Wednesday', 'Friday'],
         whatToBring: ['Mat', 'Water bottle', 'Comfortable clothing', 'Small towel'],
     },
     {
@@ -102,6 +110,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Boxing Ring',
         description: 'Learn proper boxing techniques while getting an incredible full-body workout. Improve your coordination, speed, and power.',
         price: 32,
+        time: '19:00',
+        daysOfWeek: ['Tuesday', 'Thursday'],
         whatToBring: ['Boxing gloves', 'Hand wraps', 'Water bottle', 'Athletic shoes', 'Mouthguard (optional)'],
     },
     {
@@ -116,6 +126,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Studio A, 2nd Floor',
         description: 'Start your day with gentle flowing movements and mindful breathing. Perfect for all levels.',
         price: 20,
+        time: '07:00',
+        daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         whatToBring: ['Yoga mat', 'Water bottle', 'Comfortable clothing', 'Yoga blocks (optional)'],
     },
     {
@@ -130,6 +142,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Weight Room',
         description: 'Dynamic kettlebell training to build explosive strength and power. Great for functional fitness.',
         price: 28,
+        time: '12:00',
+        daysOfWeek: ['Tuesday', 'Thursday', 'Saturday'],
         whatToBring: ['Water bottle', 'Towel', 'Athletic shoes', 'Workout gloves (optional)'],
     },
     {
@@ -144,6 +158,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Studio A, 2nd Floor',
         description: 'Relax and restore with gentle poses held for longer periods. Perfect for stress relief and recovery.',
         price: 24,
+        time: '20:00',
+        daysOfWeek: ['Wednesday', 'Sunday'],
         whatToBring: ['Yoga mat', 'Blanket', 'Eye pillow (optional)', 'Comfortable loose clothing'],
     },
     {
@@ -158,6 +174,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Main Gym Floor',
         description: 'Military-inspired workout combining cardio, strength, and agility drills. Prepare to be challenged!',
         price: 35,
+        time: '06:00',
+        daysOfWeek: ['Monday', 'Wednesday', 'Friday', 'Saturday'],
         whatToBring: ['Water bottle', 'Towel', 'Athletic shoes', 'Energy snack', 'Heart rate monitor (optional)'],
     },
     {
@@ -172,6 +190,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Studio B, 2nd Floor',
         description: 'Advanced Pilates using the reformer machine for a challenging full-body workout.',
         price: 30,
+        time: '10:00',
+        daysOfWeek: ['Tuesday', 'Thursday', 'Saturday'],
         whatToBring: ['Water bottle', 'Grip socks', 'Comfortable fitted clothing', 'Small towel'],
     },
     {
@@ -186,6 +206,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Boxing Ring',
         description: 'High-energy kickboxing workout combining martial arts techniques with cardio conditioning.',
         price: 30,
+        time: '19:00',
+        daysOfWeek: ['Monday', 'Wednesday', 'Friday'],
         whatToBring: ['Boxing gloves', 'Hand wraps', 'Water bottle', 'Athletic shoes', 'Towel'],
     },
     {
@@ -200,6 +222,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Main Gym Floor',
         description: 'Workout of the Day featuring Olympic lifts, gymnastics, and metabolic conditioning.',
         price: 32,
+        time: '06:30',
+        daysOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         whatToBring: ['Water bottle', 'Towel', 'Wrist wraps', 'Athletic shoes', 'Jump rope (optional)'],
     },
     {
@@ -214,6 +238,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Studio A, 2nd Floor',
         description: 'Fun Latin-inspired dance fitness class that feels more like a party than a workout!',
         price: 22,
+        time: '18:30',
+        daysOfWeek: ['Tuesday', 'Thursday'],
         whatToBring: ['Water bottle', 'Dance shoes or sneakers', 'Comfortable clothing', 'Positive energy'],
     },
     {
@@ -228,6 +254,8 @@ const mockGymFlowClasses: GymFlowClass[] = [
         location: 'Studio B, 2nd Floor',
         description: 'Intense 30-minute core workout targeting all abdominal muscles. Short but effective!',
         price: 18,
+        time: '13:00',
+        daysOfWeek: ['Monday', 'Wednesday', 'Friday', 'Sunday'],
         whatToBring: ['Mat', 'Water bottle', 'Towel', 'Comfortable athletic wear'],
     },
 ];
@@ -818,7 +846,6 @@ export class MockGymFlowApi implements GymFlowApiContract {
         const newClass: GymFlowClass = {
             id: 'class-' + (mockGymFlowClasses.length + 1),
             ...request,
-            time: '00:00',
         };
 
         mockGymFlowClasses.push(newClass);
@@ -879,108 +906,4 @@ export class MockGymFlowApi implements GymFlowApiContract {
         };
     }
 
-    async createSession(request: CreateSessionRequest): Promise<ApiResponse<ClassSession>> {
-        await delay(500);
-
-        const classItem = mockGymFlowClasses.find((c) => c.id === request.classId);
-
-        if (!classItem) {
-            return {
-                success: false,
-                error: 'Class not found',
-            };
-        }
-
-        const newSessionId = 'session-' + (mockClassSessions.length + 1);
-        const newSession = {
-            id: newSessionId,
-            classId: request.classId,
-            date: request.date,
-            time: request.time,
-            spotsLeft: request.spotsLeft,
-        };
-
-        mockClassSessions.push(newSession);
-
-        const enriched = enrichSessionForBooking(newSessionId);
-
-        if (!enriched) {
-            return {
-                success: false,
-                error: 'Failed to create session',
-            };
-        }
-
-        return {
-            success: true,
-            data: enriched,
-        };
-    }
-
-    async updateSession(request: UpdateSessionRequest): Promise<ApiResponse<ClassSession>> {
-        await delay(500);
-
-        const sessionIndex = mockClassSessions.findIndex((s) => s.id === request.id);
-
-        if (sessionIndex === -1) {
-            return {
-                success: false,
-                error: 'Session not found',
-            };
-        }
-
-        if (request.date !== undefined) {
-            mockClassSessions[sessionIndex].date = request.date;
-        }
-        if (request.time !== undefined) {
-            mockClassSessions[sessionIndex].time = request.time;
-        }
-        if (request.spotsLeft !== undefined) {
-            mockClassSessions[sessionIndex].spotsLeft = request.spotsLeft;
-        }
-
-        const enriched = enrichSessionForBooking(request.id);
-
-        if (!enriched) {
-            return {
-                success: false,
-                error: 'Failed to update session',
-            };
-        }
-
-        return {
-            success: true,
-            data: enriched,
-        };
-    }
-
-    async deleteSession(sessionId: string): Promise<ApiResponse<void>> {
-        await delay(500);
-
-        const sessionIndex = mockClassSessions.findIndex((s) => s.id === sessionId);
-
-        if (sessionIndex === -1) {
-            return {
-                success: false,
-                error: 'Session not found',
-            };
-        }
-
-        const hasBookings = mockBookings.some(
-            (b) => b.sessionId === sessionId && b.status === 'CONFIRMED'
-        );
-
-        if (hasBookings) {
-            return {
-                success: false,
-                error: 'Cannot delete session with confirmed bookings',
-            };
-        }
-
-        mockClassSessions.splice(sessionIndex, 1);
-
-        return {
-            success: true,
-        };
-    }
 }

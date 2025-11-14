@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { BarChart3, Calendar, Dumbbell } from 'lucide-react';
+import { BarChart3, Dumbbell } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import AdminPage from './AdminPage';
 import AdminClassesPage from './AdminClassesPage';
-import AdminSessionsPage from './AdminSessionsPage';
 
 export default function AdminDashboardLayout() {
   const { user } = useAuth();
@@ -23,8 +22,6 @@ export default function AdminDashboardLayout() {
       setActiveTab('overview');
     } else if (path === '/admin/classes') {
       setActiveTab('classes');
-    } else if (path === '/admin/sessions') {
-      setActiveTab('sessions');
     }
   }, [user, navigate, location]);
 
@@ -35,7 +32,6 @@ export default function AdminDashboardLayout() {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: BarChart3, path: '/admin' },
     { id: 'classes', label: 'Classes', icon: Dumbbell, path: '/admin/classes' },
-    { id: 'sessions', label: 'Sessions', icon: Calendar, path: '/admin/sessions' },
   ];
 
   return (
@@ -68,7 +64,6 @@ export default function AdminDashboardLayout() {
 
       {activeTab === 'overview' && <AdminPage />}
       {activeTab === 'classes' && <AdminClassesPage />}
-      {activeTab === 'sessions' && <AdminSessionsPage />}
     </div>
   );
 }

@@ -19,6 +19,7 @@ export interface GymFlowClass {
   description: string;
   price: number;
   time: string;
+  daysOfWeek: string[];
   whatToBring?: string[];
 }
 

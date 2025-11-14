@@ -31,6 +31,8 @@ export default function AdminClassesPage() {
     location: '',
     description: '',
     price: 0,
+    time: '',
+    daysOfWeek: [],
     whatToBring: [],
   });
 
@@ -69,6 +71,8 @@ export default function AdminClassesPage() {
       location: 'Main Gym Floor',
       description: '',
       price: 25,
+      time: '09:00',
+      daysOfWeek: [],
       whatToBring: [],
     });
     setShowModal(true);
@@ -87,6 +91,8 @@ export default function AdminClassesPage() {
       location: cls.location,
       description: cls.description,
       price: cls.price,
+      time: cls.time,
+      daysOfWeek: cls.daysOfWeek,
       whatToBring: cls.whatToBring || [],
     });
     setShowModal(true);
@@ -185,6 +191,10 @@ export default function AdminClassesPage() {
 
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">Time:</span>
+                    <span className="font-semibold text-gray-900">{cls.time}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Duration:</span>
                     <span className="font-semibold text-gray-900">{cls.duration}</span>
                   </div>
@@ -199,6 +209,20 @@ export default function AdminClassesPage() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Level:</span>
                     <span className="font-semibold text-gray-900">{cls.level}</span>
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <p className="text-xs text-gray-500 mb-2">Schedule:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {cls.daysOfWeek.map((day) => (
+                      <span
+                        key={day}
+                        className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded"
+                      >
+                        {day.slice(0, 3)}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
@@ -379,6 +403,45 @@ export default function AdminClassesPage() {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Describe the class..."
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Class Time
+                  </label>
+                  <input
+                    type="time"
+                    value={formData.time}
+                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Days of Week
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+                      <label key={day} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.daysOfWeek.includes(day)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData({ ...formData, daysOfWeek: [...formData.daysOfWeek, day] });
+                            } else {
+                              setFormData({ ...formData, daysOfWeek: formData.daysOfWeek.filter(d => d !== day) });
+                            }
+                          }}
+                          className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                        />
+                        <span className="text-sm text-gray-700">{day.slice(0, 3)}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div>

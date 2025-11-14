@@ -39,7 +39,6 @@ function App() {
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/admin" element={<AdminDashboardLayout />} />
                         <Route path="/admin/classes" element={<AdminDashboardLayout />} />
-                        <Route path="/admin/sessions" element={<AdminDashboardLayout />} />
                         <Route path="/schedule" element={<ClassesPage />} />
                         <Route path="/booking/success" element={<BookingSuccessPage />} />
                     </Routes>

@@ -26,25 +26,13 @@ export interface CreateClassRequest {
   location: string;
   description: string;
   price: number;
+  time: string;
+  daysOfWeek: string[];
   whatToBring: string[];
 }
 
 export interface UpdateClassRequest extends Partial<CreateClassRequest> {
   id: string;
-}
-
-export interface CreateSessionRequest {
-  classId: string;
-  date: string;
-  time: string;
-  spotsLeft: number;
-}
-
-export interface UpdateSessionRequest {
-  id: string;
-  date?: string;
-  time?: string;
-  spotsLeft?: number;
 }
 
 export interface GymFlowApiContract {
@@ -75,10 +63,4 @@ export interface GymFlowApiContract {
   updateClass(request: UpdateClassRequest): Promise<ApiResponse<GymFlowClass>>;
 
   deleteClass(classId: string): Promise<ApiResponse<void>>;
-
-  createSession(request: CreateSessionRequest): Promise<ApiResponse<ClassSession>>;
-
-  updateSession(request: UpdateSessionRequest): Promise<ApiResponse<ClassSession>>;
-
-  deleteSession(sessionId: string): Promise<ApiResponse<void>>;
 }
