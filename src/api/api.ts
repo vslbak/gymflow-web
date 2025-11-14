@@ -1,4 +1,4 @@
-import type { GymFlowApiContract, RefreshTokenRequest } from './base';
+import type { GymFlowApiContract, RefreshTokenRequest, CreateClassRequest, UpdateClassRequest } from './base';
 import type {
   GymFlowClass,
   ClassSession,
@@ -65,7 +65,18 @@ export class GymFlowApi implements GymFlowApiContract {
   }
 
   async getClasses(): Promise<ApiResponse<GymFlowClass[]>> {
-    return this.request<GymFlowClass[]>('/classes');
+    const result = await this.request<any[]>('/classes');
+    if (result.success && result.data) {
+      return {
+        success: true,
+        data: result.data.map(cls => ({
+          ...cls,
+          daysOfWeek: cls.days || [],
+          whatToBring: cls.what_to_bring || cls.whatToBring || [],
+        })),
+      };
+    }
+    return result as ApiResponse<GymFlowClass[]>;
   }
 
   async getClassSessions(): Promise<ApiResponse<ClassSession[]>> {
@@ -122,6 +133,62 @@ export class GymFlowApi implements GymFlowApiContract {
 
   async cancelBooking(bookingId: string): Promise<ApiResponse<void>> {
     return this.request<void>(`/booking/${bookingId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async createClass(request: CreateClassRequest): Promise<ApiResponse<GymFlowClass>> {
+    const backendRequest = {
+      ...request,
+      days: request.daysOfWeek,
+    };
+    delete (backendRequest as any).daysOfWeek;
+
+    const result = await this.request<any>('/admin/classes', {
+      method: 'POST',
+      body: JSON.stringify(backendRequest),
+    });
+
+    if (result.success && result.data) {
+      return {
+        success: true,
+        data: {
+          ...result.data,
+          daysOfWeek: result.data.days || [],
+          whatToBring: result.data.what_to_bring || result.data.whatToBring || [],
+        },
+      };
+    }
+    return result as ApiResponse<GymFlowClass>;
+  }
+
+  async updateClass(request: UpdateClassRequest): Promise<ApiResponse<GymFlowClass>> {
+    const backendRequest = {
+      ...request,
+      days: request.daysOfWeek,
+    };
+    delete (backendRequest as any).daysOfWeek;
+
+    const result = await this.request<any>(`/admin/classes/${request.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(backendRequest),
+    });
+
+    if (result.success && result.data) {
+      return {
+        success: true,
+        data: {
+          ...result.data,
+          daysOfWeek: result.data.days || [],
+          whatToBring: result.data.what_to_bring || result.data.whatToBring || [],
+        },
+      };
+    }
+    return result as ApiResponse<GymFlowClass>;
+  }
+
+  async deleteClass(classId: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/admin/classes/${classId}`, {
       method: 'DELETE',
     });
   }
