@@ -359,7 +359,19 @@ export class MockGymFlowApi implements GymFlowApiContract {
 
     async getSessionsByClassId(classId: string): Promise<ApiResponse<ClassSession[]>> {
         await delay(300);
-        const sessions = mockClassSessions.filter((s) => s.classId === classId);
+        const sessions = mockClassSessions
+            .filter((s) => s.classId === classId)
+            .map((s) => {
+                const gymflowClass = mockGymFlowClasses.find((c) => c.id === s.classId);
+                if (!gymflowClass) return null;
+                return {
+                    id: s.id,
+                    gymflowClass: { ...gymflowClass, time: s.time },
+                    date: s.date,
+                    spotsLeft: s.spotsLeft,
+                };
+            })
+            .filter((s): s is ClassSession => s !== null);
 
         return {
             success: true,
