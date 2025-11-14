@@ -80,7 +80,9 @@ export default function AdminClassesPage() {
 
   const handleOpenEdit = (cls: GymFlowClass) => {
     setEditingClass(cls);
-    setFormData({
+    console.log('Opening edit for class:', cls.name);
+    console.log('daysOfWeek from class:', cls.daysOfWeek);
+    const newFormData = {
       name: cls.name,
       instructor: cls.instructor,
       duration: cls.duration,
@@ -94,7 +96,9 @@ export default function AdminClassesPage() {
       time: cls.time || '09:00',
       daysOfWeek: cls.daysOfWeek || [],
       whatToBring: cls.whatToBring || [],
-    });
+    };
+    console.log('Setting formData.daysOfWeek to:', newFormData.daysOfWeek);
+    setFormData(newFormData);
     setShowModal(true);
   };
 
@@ -425,24 +429,28 @@ export default function AdminClassesPage() {
                     Days of Week
                   </label>
                   <div className="grid grid-cols-2 gap-2 mt-2">
-                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
-                      <label key={day} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.daysOfWeek?.includes(day) || false}
-                          onChange={(e) => {
-                            const currentDays = formData.daysOfWeek || [];
-                            if (e.target.checked) {
-                              setFormData({ ...formData, daysOfWeek: [...currentDays, day] });
-                            } else {
-                              setFormData({ ...formData, daysOfWeek: currentDays.filter(d => d !== day) });
-                            }
-                          }}
-                          className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-                        />
-                        <span className="text-sm text-gray-700">{day.slice(0, 3)}</span>
-                      </label>
-                    ))}
+                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
+                      const isChecked = formData.daysOfWeek?.includes(day) || false;
+                      console.log(`Day: ${day}, formData.daysOfWeek:`, formData.daysOfWeek, 'isChecked:', isChecked);
+                      return (
+                        <label key={day} className="flex items-center space-x-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={(e) => {
+                              const currentDays = formData.daysOfWeek || [];
+                              if (e.target.checked) {
+                                setFormData({ ...formData, daysOfWeek: [...currentDays, day] });
+                              } else {
+                                setFormData({ ...formData, daysOfWeek: currentDays.filter(d => d !== day) });
+                              }
+                            }}
+                            className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                          />
+                          <span className="text-sm text-gray-700">{day.slice(0, 3)}</span>
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
