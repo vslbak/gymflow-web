@@ -6,6 +6,7 @@ import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import type { ClassSession } from '../types';
 import { formatDuration } from '../utils/formatDuration';
+import CalendarComponent from '../components/common/Calendar';
 
 export default function ClassPage() {
     const { id } = useParams();
@@ -124,31 +125,26 @@ export default function ClassPage() {
 
                             <div className="p-8">
                                 <div className="mb-8">
-                                    <label className="block text-sm font-semibold text-gray-900 mb-3">
+                                    <label className="block text-sm font-semibold text-gray-900 mb-4">
                                         Select Date
                                     </label>
-                                    <select
-                                        value={selectedDate}
-                                        onChange={(e) => setSelectedDate(e.target.value)}
-                                        className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none bg-white cursor-pointer"
-                                        style={{
-                                            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                                            backgroundPosition: 'right 0.5rem center',
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundSize: '1.5em 1.5em',
-                                        }}
-                                    >
-                                        {availableDates.map((date) => (
-                                            <option key={date} value={date}>
-                                                {new Date(date).toLocaleDateString('en-US', {
+                                    <CalendarComponent
+                                        availableDates={availableDates}
+                                        selectedDate={selectedDate}
+                                        onDateSelect={setSelectedDate}
+                                    />
+                                    {selectedDate && (
+                                        <div className="mt-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
+                                            <p className="text-sm font-semibold text-orange-900">
+                                                Selected: {new Date(selectedDate).toLocaleDateString('en-US', {
                                                     weekday: 'long',
                                                     year: 'numeric',
                                                     month: 'long',
                                                     day: 'numeric',
                                                 })}
-                                            </option>
-                                        ))}
-                                    </select>
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="grid md:grid-cols-2 gap-6 mb-8">
