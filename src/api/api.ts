@@ -144,7 +144,7 @@ export class GymFlowApi implements GymFlowApiContract {
     };
     delete (backendRequest as any).daysOfWeek;
 
-    const result = await this.request<any>('/admin/classes', {
+    const result = await this.request<any>('/classes', {
       method: 'POST',
       body: JSON.stringify(backendRequest),
     });
@@ -169,7 +169,7 @@ export class GymFlowApi implements GymFlowApiContract {
     };
     delete (backendRequest as any).daysOfWeek;
 
-    const result = await this.request<any>(`/admin/classes/${request.id}`, {
+    const result = await this.request<any>(`/classes/${request.id}`, {
       method: 'PUT',
       body: JSON.stringify(backendRequest),
     });
@@ -188,7 +188,7 @@ export class GymFlowApi implements GymFlowApiContract {
   }
 
   async deleteClass(classId: string): Promise<ApiResponse<void>> {
-    return this.request<void>(`/admin/classes/${classId}`, {
+    return this.request<void>(`/classes/${classId}`, {
       method: 'DELETE',
     });
   }
