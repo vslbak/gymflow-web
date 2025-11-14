@@ -10,7 +10,7 @@ import type {
     BookingResponse,
     ApiResponse,
 } from '../types';
-import type { GymFlowApiContract } from './base';
+import type { GymFlowApiContract, RefreshTokenRequest } from './base';
 
 const mockGymFlowClasses: GymFlowClass[] = [
     {
@@ -426,6 +426,26 @@ export class MockGymFlowApi implements GymFlowApiContract {
         };
 
         mockUsers.push(newUser);
+
+        return {
+            success: true,
+            data: {
+                accessToken: 'mock-jwt-token-' + Date.now(),
+                expiresIn: 3600,
+                refreshToken: 'mock-refresh-token-' + Date.now(),
+            },
+        };
+    }
+
+    async refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<LoginResponse>> {
+        await delay(300);
+
+        if (!request.refreshToken || !request.refreshToken.startsWith('mock-refresh-token')) {
+            return {
+                success: false,
+                error: 'Invalid refresh token',
+            };
+        }
 
         return {
             success: true,

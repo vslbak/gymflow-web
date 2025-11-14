@@ -1,4 +1,4 @@
-import type { GymFlowApiContract } from './base';
+import type { GymFlowApiContract, RefreshTokenRequest } from './base';
 import type {
   GymFlowClass,
   ClassSession,
@@ -88,6 +88,13 @@ export class GymFlowApi implements GymFlowApiContract {
 
   async signup(request: SignupRequest): Promise<ApiResponse<LoginResponse>> {
     return this.request<LoginResponse>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    });
+  }
+
+  async refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<LoginResponse>> {
+    return this.request<LoginResponse>('/auth/refresh', {
       method: 'POST',
       body: JSON.stringify(request),
     });

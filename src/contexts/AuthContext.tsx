@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshToken = async () => {
+  const refreshTokenAsync = async () => {
     const storedRefreshToken = localStorage.getItem('refreshToken');
     if (!storedRefreshToken) {
       logout();
@@ -26,18 +26,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const response = await fetch('/auth/refresh', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken: storedRefreshToken }),
-      });
+      const response = await api.refreshToken({ refreshToken: storedRefreshToken });
 
-      if (response.ok) {
-        const data: LoginResponse = await response.json();
-        setToken(data.accessToken);
-        localStorage.setItem('token', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('tokenExpiry', String(Date.now() + data.expiresIn * 1000));
+      if (response.success && response.data) {
+        setToken(response.data.accessToken);
+        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+        localStorage.setItem('tokenExpiry', String(Date.now() + response.data.expiresIn * 1000));
       } else {
         logout();
       }
@@ -57,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const now = Date.now();
 
         if (now >= expiryTime) {
-          await refreshToken();
+          await refreshTokenAsync();
         } else {
       try {
           const response = await api.getCurrentUser(storedToken);
@@ -65,11 +60,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(response.data);
       setToken(storedToken);
           } else {
-              await refreshToken();
+              await refreshTokenAsync();
           }
       } catch (error) {
           console.error('Failed to fetch user data:', error);
-            await refreshToken();
+            await refreshTokenAsync();
           }
       }
     }
@@ -88,13 +83,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const timeUntilExpiry = expiryTime - now;
 
     if (timeUntilExpiry <= 0) {
-      refreshToken();
+      refreshTokenAsync();
       return;
     }
 
     const refreshTime = timeUntilExpiry - 60000;
     const timeout = setTimeout(() => {
-      refreshToken();
+      refreshTokenAsync();
     }, refreshTime);
 
     return () => clearTimeout(timeout);

@@ -11,6 +11,10 @@ import type {
     ApiResponse,
 } from '../types';
 
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
 export interface GymFlowApiContract {
   getClasses(): Promise<ApiResponse<GymFlowClass[]>>;
 
@@ -23,6 +27,8 @@ export interface GymFlowApiContract {
   login(request: LoginRequest): Promise<ApiResponse<LoginResponse>>;
 
   signup(request: SignupRequest): Promise<ApiResponse<LoginResponse>>;
+
+  refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<LoginResponse>>;
 
   getCurrentUser(token: string): Promise<ApiResponse<User>>;
 
