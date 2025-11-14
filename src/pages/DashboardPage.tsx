@@ -68,13 +68,13 @@ export default function DashboardPage() {
     const upcomingBookings = bookings.filter((b) => {
         const status = normalizeStatus(b.status);
         const bookingDate = getBookingDate(b);
-        return status === 'SUCCESS' && bookingDate > new Date();
+        return (status === 'SUCCESS' || status === 'CONFIRMED') && bookingDate > new Date();
     });
 
     const pastBookings = bookings.filter((b) => {
         const status = normalizeStatus(b.status);
         const bookingDate = getBookingDate(b);
-        if (status === 'SUCCESS' && bookingDate <= new Date()) {
+        if ((status === 'SUCCESS' || status === 'CONFIRMED') && bookingDate <= new Date()) {
             return true;
         }
         return status === 'FAILED' || status === 'CANCELLED';
@@ -83,7 +83,10 @@ export default function DashboardPage() {
     const cancelledBookings = bookings.filter((b) => normalizeStatus(b.status) === 'CANCELLED');
 
     const pendingBookings = bookings.filter((b) => normalizeStatus(b.status) === 'PENDING');
-    const confirmedBookings = bookings.filter((b) => normalizeStatus(b.status) === 'SUCCESS');
+    const confirmedBookings = bookings.filter((b) => {
+        const status = normalizeStatus(b.status);
+        return status === 'SUCCESS' || status === 'CONFIRMED';
+    });
 
     const totalSpent = bookings
         .filter((b) => normalizeStatus(b.status) !== 'CANCELLED')
@@ -343,7 +346,7 @@ export default function DashboardPage() {
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-3">
-                                            {normalizeStatus(booking.status) === 'SUCCESS' && getBookingDate(booking) <= new Date() && (
+                                            {(normalizeStatus(booking.status) === 'SUCCESS' || normalizeStatus(booking.status) === 'CONFIRMED') && getBookingDate(booking) <= new Date() && (
                                                 <>
                                                     <span className="text-green-600 font-semibold text-sm flex items-center">
                                                         <CheckCircle className="h-4 w-4 mr-1" />
