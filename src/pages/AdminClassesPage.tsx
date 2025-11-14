@@ -91,8 +91,8 @@ export default function AdminClassesPage() {
       location: cls.location,
       description: cls.description,
       price: cls.price,
-      time: cls.time,
-      daysOfWeek: cls.daysOfWeek,
+      time: cls.time || '09:00',
+      daysOfWeek: cls.daysOfWeek || [],
       whatToBring: cls.whatToBring || [],
     });
     setShowModal(true);
@@ -212,19 +212,21 @@ export default function AdminClassesPage() {
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <p className="text-xs text-gray-500 mb-2">Schedule:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {cls.daysOfWeek.map((day) => (
-                      <span
-                        key={day}
-                        className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded"
-                      >
-                        {day.slice(0, 3)}
-                      </span>
-                    ))}
+                {cls.daysOfWeek && cls.daysOfWeek.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-xs text-gray-500 mb-2">Schedule:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {cls.daysOfWeek.map((day) => (
+                        <span
+                          key={day}
+                          className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded"
+                        >
+                          {day.slice(0, 3)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex space-x-2">
                   <button
