@@ -51,7 +51,9 @@ export default function DashboardPage() {
                 setSnackbar({ isVisible: true, message: 'Booking cancelled. You will be refunded soon.', type: 'success' });
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 2500);
+            } else {
+                setSnackbar({ isVisible: true, message: response.error || 'Failed to cancel booking.', type: 'error' });
             }
         } catch (error) {
             console.error('Failed to cancel booking:', error);

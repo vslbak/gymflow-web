@@ -549,7 +549,7 @@ export class MockGymFlowApi implements GymFlowApiContract {
         }
 
         const booking = mockBookings[bookingIndex];
-        booking.status = 'cancelled';
+        booking.status = 'CANCELLED';
 
         const session = mockClassSessions.find((s) => s.id === booking.sessionId);
         if (session) {
