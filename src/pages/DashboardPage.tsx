@@ -14,7 +14,7 @@ export default function DashboardPage() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
     const [confirmModal, setConfirmModal] = useState<{ isOpen: boolean; bookingId: string | null }>({ isOpen: false, bookingId: null });
-    const [snackbar, setSnackbar] = useState({ isVisible: false, message: '' });
+    const [snackbar, setSnackbar] = useState<{ isVisible: boolean; message: string; type: 'success' | 'error' }>({ isVisible: false, message: '', type: 'success' });
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -48,11 +48,14 @@ export default function DashboardPage() {
         try {
             const response = await api.cancelBooking(bookingId);
             if (response.success) {
-                setSnackbar({ isVisible: true, message: 'Booking cancelled. You will be refunded soon.' });
-                window.location.reload();
+                setSnackbar({ isVisible: true, message: 'Booking cancelled. You will be refunded soon.', type: 'success' });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             }
         } catch (error) {
             console.error('Failed to cancel booking:', error);
+            setSnackbar({ isVisible: true, message: 'Failed to cancel booking. Please try again.', type: 'error' });
         }
     };
 
@@ -507,8 +510,8 @@ export default function DashboardPage() {
                 <Snackbar
                     message={snackbar.message}
                     isVisible={snackbar.isVisible}
-                    onClose={() => setSnackbar({ isVisible: false, message: '' })}
-                    type="success"
+                    onClose={() => setSnackbar({ isVisible: false, message: '', type: 'success' })}
+                    type={snackbar.type}
                 />
             </div>
         </div>
