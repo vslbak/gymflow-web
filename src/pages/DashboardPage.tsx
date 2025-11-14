@@ -68,19 +68,22 @@ export default function DashboardPage() {
     const upcomingBookings = bookings.filter((b) => {
         const status = normalizeStatus(b.status);
         const bookingDate = getBookingDate(b);
-        return (status === 'CONFIRMED' || status === 'PENDING') && bookingDate > new Date();
+        return status === 'SUCCESS' && bookingDate > new Date();
     });
 
     const pastBookings = bookings.filter((b) => {
         const status = normalizeStatus(b.status);
         const bookingDate = getBookingDate(b);
-        return status === 'CONFIRMED' && bookingDate <= new Date();
+        if (status === 'SUCCESS' && bookingDate <= new Date()) {
+            return true;
+        }
+        return status === 'PENDING' || status === 'FAILED' || status === 'CANCELLED';
     });
 
     const cancelledBookings = bookings.filter((b) => normalizeStatus(b.status) === 'CANCELLED');
 
     const pendingBookings = bookings.filter((b) => normalizeStatus(b.status) === 'PENDING');
-    const confirmedBookings = bookings.filter((b) => normalizeStatus(b.status) === 'CONFIRMED');
+    const confirmedBookings = bookings.filter((b) => normalizeStatus(b.status) === 'SUCCESS');
 
     const totalSpent = bookings
         .filter((b) => normalizeStatus(b.status) !== 'CANCELLED')
@@ -293,17 +296,39 @@ export default function DashboardPage() {
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-3">
-                                            <span className="text-green-600 font-semibold text-sm flex items-center">
-                                                <CheckCircle className="h-4 w-4 mr-1" />
-                                                Completed
-                                            </span>
-                                            {booking.classSession?.gymflowClass?.id && (
-                                                <Link
-                                                    to={`/class/${booking.classSession.gymflowClass.id}`}
-                                                    className="text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors"
-                                                >
-                                                    Book Again
-                                                </Link>
+                                            {normalizeStatus(booking.status) === 'SUCCESS' && getBookingDate(booking) <= new Date() && (
+                                                <>
+                                                    <span className="text-green-600 font-semibold text-sm flex items-center">
+                                                        <CheckCircle className="h-4 w-4 mr-1" />
+                                                        Completed
+                                                    </span>
+                                                    {booking.classSession?.gymflowClass?.id && (
+                                                        <Link
+                                                            to={`/class/${booking.classSession.gymflowClass.id}`}
+                                                            className="text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors"
+                                                        >
+                                                            Book Again
+                                                        </Link>
+                                                    )}
+                                                </>
+                                            )}
+                                            {normalizeStatus(booking.status) === 'PENDING' && (
+                                                <span className="text-yellow-600 font-semibold text-sm flex items-center">
+                                                    <Clock className="h-4 w-4 mr-1" />
+                                                    Pending
+                                                </span>
+                                            )}
+                                            {normalizeStatus(booking.status) === 'FAILED' && (
+                                                <span className="text-red-600 font-semibold text-sm flex items-center">
+                                                    <XCircle className="h-4 w-4 mr-1" />
+                                                    Failed
+                                                </span>
+                                            )}
+                                            {normalizeStatus(booking.status) === 'CANCELLED' && (
+                                                <span className="text-gray-600 font-semibold text-sm flex items-center">
+                                                    <XCircle className="h-4 w-4 mr-1" />
+                                                    Cancelled
+                                                </span>
                                             )}
                                         </div>
                                     </div>
