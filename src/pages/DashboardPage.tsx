@@ -5,12 +5,16 @@ import { api } from '../api/apiFactory';
 import { useAuth } from '../contexts/AuthContext';
 import type { Booking } from '../types';
 import LoadingSkeleton from '../components/common/LoadingSkeleton';
+import ConfirmModal from '../components/common/ConfirmModal';
+import Snackbar from '../components/common/Snackbar';
 import { formatDuration } from '../utils/formatDuration';
 
 export default function DashboardPage() {
     const { user } = useAuth();
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
+    const [confirmModal, setConfirmModal] = useState<{ isOpen: boolean; bookingId: string | null }>({ isOpen: false, bookingId: null });
+    const [snackbar, setSnackbar] = useState({ isVisible: false, message: '' });
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -31,15 +35,21 @@ export default function DashboardPage() {
         fetchBookings();
     }, [user, api]);
 
-    const handleCancelBooking = async (bookingId: string) => {
-        if (!confirm('Are you sure you want to cancel this booking?')) return;
+    const handleCancelClick = (bookingId: string) => {
+        setConfirmModal({ isOpen: true, bookingId });
+    };
+
+    const handleCancelBooking = async () => {
+        const bookingId = confirmModal.bookingId;
+        if (!bookingId) return;
+
+        setConfirmModal({ isOpen: false, bookingId: null });
 
         try {
             const response = await api.cancelBooking(bookingId);
             if (response.success) {
-                setBookings((prev) =>
-                    prev.map((b) => (b.id === bookingId ? { ...b, status: 'CANCELLED' as const } : b))
-                );
+                setSnackbar({ isVisible: true, message: 'Booking cancelled. You will be refunded soon.' });
+                window.location.reload();
             }
         } catch (error) {
             console.error('Failed to cancel booking:', error);
@@ -230,7 +240,7 @@ export default function DashboardPage() {
                                                             </Link>
                                                         )}
                                                         <button
-                                                            onClick={() => handleCancelBooking(booking.id)}
+                                                            onClick={() => handleCancelClick(booking.id)}
                                                             className="bg-red-100 text-red-700 px-4 py-2 rounded-lg font-semibold hover:bg-red-200 transition-colors flex items-center"
                                                         >
                                                             <XCircle className="h-4 w-4 mr-2" />
@@ -417,6 +427,23 @@ export default function DashboardPage() {
                         </section>
                     )}
                 </div>
+
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    onClose={() => setConfirmModal({ isOpen: false, bookingId: null })}
+                    onConfirm={handleCancelBooking}
+                    title="Cancel Booking"
+                    message="Are you sure you want to cancel this booking? You will be refunded soon."
+                    confirmText="Yes, Cancel"
+                    cancelText="Keep Booking"
+                />
+
+                <Snackbar
+                    message={snackbar.message}
+                    isVisible={snackbar.isVisible}
+                    onClose={() => setSnackbar({ isVisible: false, message: '' })}
+                    type="success"
+                />
             </div>
         </div>
     );
