@@ -32,7 +32,7 @@ export default function AdminClassesPage() {
     location: '',
     description: '',
     price: 0,
-    time: '',
+    classTime: '',
     daysOfWeek: [],
     whatToBring: [],
   });
@@ -75,7 +75,7 @@ export default function AdminClassesPage() {
       location: 'Main Gym Floor',
       description: '',
       price: 25,
-      time: '09:00',
+      classTime: '09:00',
       daysOfWeek: [],
       whatToBring: [],
     });
@@ -97,7 +97,7 @@ export default function AdminClassesPage() {
       location: cls.location,
       description: cls.description,
       price: cls.price,
-      time: cls.time || '09:00',
+      classTime: cls.classTime || '09:00',
       daysOfWeek: cls.daysOfWeek || [],
       whatToBring: cls.whatToBring || [],
     };
@@ -204,7 +204,7 @@ export default function AdminClassesPage() {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Time:</span>
-                    <span className="font-semibold text-gray-900">{cls.time}</span>
+                    <span className="font-semibold text-gray-900">{cls.classTime}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Duration:</span>
@@ -432,8 +432,8 @@ export default function AdminClassesPage() {
                   </label>
                   <input
                     type="time"
-                    value={formData.time}
-                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                    value={formData.classTime}
+                    onChange={(e) => setFormData({ ...formData, classTime: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   />
                 </div>

@@ -488,7 +488,7 @@ export default function DashboardPage() {
                                                     {booking.classSession?.gymflowClass?.name}
                                                 </h3>
                                                 <p className="text-gray-500">
-                                                    {booking.classSession?.gymflowClass?.time} • {booking.classSession?.gymflowClass?.instructor}
+                                                    {booking.classSession?.gymflowClass?.classTime} • {booking.classSession?.gymflowClass?.instructor}
                                                 </p>
                                             </div>
                                         </div>

@@ -168,7 +168,7 @@ export default function ClassPage() {
                                                 <Calendar className="h-6 w-6 text-orange-600 mt-1" />
                                                 <div>
                                                     <p className="font-semibold text-gray-900">Time</p>
-                                                    <p className="text-gray-600">{session.gymflowClass.time}</p>
+                                                    <p className="text-gray-600">{session.gymflowClass.classTime}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-start space-x-3">

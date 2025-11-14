@@ -323,7 +323,7 @@ export default function AdminPage() {
                         month: 'short',
                         day: 'numeric',
                         year: 'numeric',
-                      })} at {booking.classSession.gymflowClass.time}
+                      })} at {booking.classSession.gymflowClass.classTime}
                     </p>
                   </div>
                   <div className="text-right ml-4">

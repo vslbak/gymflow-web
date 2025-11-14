@@ -364,7 +364,7 @@ const enrichSessionForBooking = (sessionId: string): ClassSession | null => {
 
     return {
         id: session.id,
-        gymflowClass: { ...gymflowClass, time: session.time },
+        gymflowClass: { ...gymflowClass, classTime: session.time },
         date: session.date,
         spotsLeft: session.spotsLeft,
     };
@@ -616,7 +616,7 @@ export class MockGymFlowApi implements GymFlowApiContract {
                 if (!gymflowClass) return null;
                 return {
                     id: s.id,
-                    gymflowClass: { ...gymflowClass, time: s.time },
+                    gymflowClass: { ...gymflowClass, classTime: s.time },
                     date: s.date,
                     spotsLeft: s.spotsLeft,
                 };
