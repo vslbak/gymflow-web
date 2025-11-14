@@ -118,17 +118,17 @@ export default function AdminClassesPage() {
           ...dataToSave,
         };
         const res = await api.updateClass(updateData);
-        if (res.success) {
+        if (res.success && res.data) {
           setSnackbar({ message: 'Class updated successfully', type: 'success' });
-          fetchClasses();
+          setClasses(classes.map(cls => cls.id === res.data!.id ? res.data! : cls));
         } else {
           setSnackbar({ message: res.error || 'Failed to update class', type: 'error' });
         }
       } else {
         const res = await api.createClass(dataToSave);
-        if (res.success) {
+        if (res.success && res.data) {
           setSnackbar({ message: 'Class created successfully', type: 'success' });
-          fetchClasses();
+          setClasses([...classes, res.data]);
         } else {
           setSnackbar({ message: res.error || 'Failed to create class', type: 'error' });
         }
@@ -144,7 +144,7 @@ export default function AdminClassesPage() {
       const res = await api.deleteClass(classId);
       if (res.success) {
         setSnackbar({ message: 'Class deleted successfully', type: 'success' });
-        fetchClasses();
+        setClasses(classes.filter(cls => cls.id !== classId));
       } else {
         setSnackbar({ message: res.error || 'Failed to delete class', type: 'error' });
       }
