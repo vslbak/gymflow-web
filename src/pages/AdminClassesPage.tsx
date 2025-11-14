@@ -435,7 +435,8 @@ export default function AdminClassesPage() {
                   </label>
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
-                      const isChecked = formData.daysOfWeek?.includes(day) || false;
+                      const dayLower = day.toLowerCase();
+                      const isChecked = formData.daysOfWeek?.some(d => d.toLowerCase() === dayLower) || false;
                       console.log(`Day: ${day}, formData.daysOfWeek:`, formData.daysOfWeek, 'isChecked:', isChecked);
                       return (
                         <label key={day} className="flex items-center space-x-2 cursor-pointer">
