@@ -180,7 +180,7 @@ export default function DashboardPage() {
                                             key={booking.id}
                                             className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all"
                                         >
-                                            <div className="md:flex md:h-56">
+                                            <div className="md:flex md:h-64">
                                                 {booking.classSession?.gymflowClass && (
                                                     <div className="md:w-64 h-48 md:h-full flex-shrink-0">
                                                         <img
