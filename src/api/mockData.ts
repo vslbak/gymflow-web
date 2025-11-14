@@ -232,24 +232,74 @@ const getDateString = (daysFromNow: number): string => {
 };
 
 const mockClassSessions: ClassSession[] = [
-    { id: 'session-1', classId: 'class-1', date: getDateString(0), time: '18:00', spotsLeft: 5 },
-    { id: 'session-2', classId: 'class-2', date: getDateString(1), time: '07:30', spotsLeft: 12 },
-    { id: 'session-3', classId: 'class-3', date: getDateString(1), time: '17:00', spotsLeft: 3 },
-    { id: 'session-4', classId: 'class-4', date: getDateString(0), time: '08:00', spotsLeft: 8 },
-    { id: 'session-5', classId: 'class-5', date: getDateString(1), time: '09:00', spotsLeft: 10 },
-    { id: 'session-6', classId: 'class-6', date: getDateString(0), time: '19:00', spotsLeft: 6 },
-    { id: 'session-7', classId: 'class-7', date: getDateString(0), time: '07:00', spotsLeft: 15 },
-    { id: 'session-8', classId: 'class-8', date: getDateString(0), time: '12:00', spotsLeft: 7 },
-    { id: 'session-9', classId: 'class-9', date: getDateString(1), time: '20:00', spotsLeft: 12 },
-    { id: 'session-10', classId: 'class-10', date: getDateString(1), time: '06:00', spotsLeft: 4 },
-    { id: 'session-11', classId: 'class-11', date: getDateString(0), time: '10:00', spotsLeft: 2 },
-    { id: 'session-12', classId: 'class-12', date: getDateString(1), time: '19:00', spotsLeft: 9 },
-    { id: 'session-13', classId: 'class-13', date: getDateString(0), time: '17:00', spotsLeft: 6 },
-    { id: 'session-14', classId: 'class-14', date: getDateString(1), time: '18:30', spotsLeft: 14 },
-    { id: 'session-15', classId: 'class-15', date: getDateString(0), time: '13:00', spotsLeft: 11 },
-    { id: 'session-16', classId: 'class-1', date: getDateString(2), time: '18:00', spotsLeft: 8 },
-    { id: 'session-17', classId: 'class-2', date: getDateString(2), time: '07:30', spotsLeft: 15 },
-    { id: 'session-18', classId: 'class-3', date: getDateString(3), time: '17:00', spotsLeft: 10 },
+    { id: 'session-1', classId: 'class-1', date: getDateString(2), time: '18:00', spotsLeft: 5 },
+    { id: 'session-2', classId: 'class-1', date: getDateString(5), time: '18:00', spotsLeft: 8 },
+    { id: 'session-3', classId: 'class-1', date: getDateString(9), time: '18:00', spotsLeft: 12 },
+    { id: 'session-4', classId: 'class-1', date: getDateString(16), time: '18:00', spotsLeft: 15 },
+
+    { id: 'session-5', classId: 'class-2', date: getDateString(1), time: '07:30', spotsLeft: 12 },
+    { id: 'session-6', classId: 'class-2', date: getDateString(3), time: '07:30', spotsLeft: 15 },
+    { id: 'session-7', classId: 'class-2', date: getDateString(8), time: '07:30', spotsLeft: 18 },
+
+    { id: 'session-8', classId: 'class-3', date: getDateString(1), time: '17:00', spotsLeft: 3 },
+    { id: 'session-9', classId: 'class-3', date: getDateString(4), time: '17:00', spotsLeft: 7 },
+    { id: 'session-10', classId: 'class-3', date: getDateString(7), time: '17:00', spotsLeft: 10 },
+    { id: 'session-11', classId: 'class-3', date: getDateString(14), time: '17:00', spotsLeft: 12 },
+
+    { id: 'session-12', classId: 'class-4', date: getDateString(2), time: '08:00', spotsLeft: 8 },
+    { id: 'session-13', classId: 'class-4', date: getDateString(4), time: '19:00', spotsLeft: 15 },
+    { id: 'session-14', classId: 'class-4', date: getDateString(6), time: '08:00', spotsLeft: 20 },
+    { id: 'session-15', classId: 'class-4', date: getDateString(11), time: '19:00', spotsLeft: 22 },
+
+    { id: 'session-16', classId: 'class-5', date: getDateString(1), time: '09:00', spotsLeft: 10 },
+    { id: 'session-17', classId: 'class-5', date: getDateString(3), time: '15:00', spotsLeft: 12 },
+    { id: 'session-18', classId: 'class-5', date: getDateString(10), time: '09:00', spotsLeft: 14 },
+
+    { id: 'session-19', classId: 'class-6', date: getDateString(2), time: '19:00', spotsLeft: 6 },
+    { id: 'session-20', classId: 'class-6', date: getDateString(5), time: '18:00', spotsLeft: 10 },
+    { id: 'session-21', classId: 'class-6', date: getDateString(9), time: '19:00', spotsLeft: 14 },
+    { id: 'session-22', classId: 'class-6', date: getDateString(12), time: '18:00', spotsLeft: 16 },
+
+    { id: 'session-23', classId: 'class-7', date: getDateString(1), time: '07:00', spotsLeft: 15 },
+    { id: 'session-24', classId: 'class-7', date: getDateString(2), time: '07:00', spotsLeft: 16 },
+    { id: 'session-25', classId: 'class-7', date: getDateString(3), time: '07:00', spotsLeft: 17 },
+    { id: 'session-26', classId: 'class-7', date: getDateString(4), time: '07:00', spotsLeft: 18 },
+    { id: 'session-27', classId: 'class-7', date: getDateString(8), time: '07:00', spotsLeft: 18 },
+
+    { id: 'session-28', classId: 'class-8', date: getDateString(2), time: '12:00', spotsLeft: 7 },
+    { id: 'session-29', classId: 'class-8', date: getDateString(6), time: '17:00', spotsLeft: 9 },
+    { id: 'session-30', classId: 'class-8', date: getDateString(13), time: '12:00', spotsLeft: 11 },
+
+    { id: 'session-31', classId: 'class-9', date: getDateString(3), time: '20:00', spotsLeft: 12 },
+    { id: 'session-32', classId: 'class-9', date: getDateString(10), time: '20:00', spotsLeft: 13 },
+
+    { id: 'session-33', classId: 'class-10', date: getDateString(1), time: '06:00', spotsLeft: 4 },
+    { id: 'session-34', classId: 'class-10', date: getDateString(3), time: '06:00', spotsLeft: 8 },
+    { id: 'session-35', classId: 'class-10', date: getDateString(5), time: '06:00', spotsLeft: 12 },
+    { id: 'session-36', classId: 'class-10', date: getDateString(8), time: '06:00', spotsLeft: 15 },
+
+    { id: 'session-37', classId: 'class-11', date: getDateString(2), time: '10:00', spotsLeft: 2 },
+    { id: 'session-38', classId: 'class-11', date: getDateString(7), time: '14:00', spotsLeft: 5 },
+    { id: 'session-39', classId: 'class-11', date: getDateString(14), time: '10:00', spotsLeft: 8 },
+
+    { id: 'session-40', classId: 'class-12', date: getDateString(1), time: '19:00', spotsLeft: 9 },
+    { id: 'session-41', classId: 'class-12', date: getDateString(4), time: '18:00', spotsLeft: 14 },
+    { id: 'session-42', classId: 'class-12', date: getDateString(8), time: '19:00', spotsLeft: 18 },
+    { id: 'session-43', classId: 'class-12', date: getDateString(11), time: '18:00', spotsLeft: 20 },
+
+    { id: 'session-44', classId: 'class-13', date: getDateString(2), time: '17:00', spotsLeft: 6 },
+    { id: 'session-45', classId: 'class-13', date: getDateString(5), time: '18:00', spotsLeft: 9 },
+    { id: 'session-46', classId: 'class-13', date: getDateString(9), time: '17:00', spotsLeft: 12 },
+
+    { id: 'session-47', classId: 'class-14', date: getDateString(1), time: '18:30', spotsLeft: 14 },
+    { id: 'session-48', classId: 'class-14', date: getDateString(3), time: '18:30', spotsLeft: 20 },
+    { id: 'session-49', classId: 'class-14', date: getDateString(6), time: '18:30', spotsLeft: 25 },
+    { id: 'session-50', classId: 'class-14', date: getDateString(10), time: '18:30', spotsLeft: 28 },
+
+    { id: 'session-51', classId: 'class-15', date: getDateString(1), time: '13:00', spotsLeft: 11 },
+    { id: 'session-52', classId: 'class-15', date: getDateString(2), time: '13:00', spotsLeft: 14 },
+    { id: 'session-53', classId: 'class-15', date: getDateString(4), time: '13:00', spotsLeft: 16 },
+    { id: 'session-54', classId: 'class-15', date: getDateString(7), time: '13:00', spotsLeft: 18 },
 ];
 
 
@@ -263,61 +313,76 @@ const mockUsers: User[] = [
     },
 ];
 
+const enrichSessionForBooking = (sessionId: string): ClassSession | null => {
+    const session = mockClassSessions.find(s => s.id === sessionId);
+    if (!session) return null;
+
+    const gymflowClass = mockGymFlowClasses.find(c => c.id === session.classId);
+    if (!gymflowClass) return null;
+
+    return {
+        id: session.id,
+        gymflowClass: { ...gymflowClass, time: session.time },
+        date: session.date,
+        spotsLeft: session.spotsLeft,
+    };
+};
+
 const mockBookings: Booking[] = [
     {
         id: 'booking-001',
         userId: '1',
         sessionId: 'session-1',
-        classSession: mockClassSessions[0],
+        classSession: enrichSessionForBooking('session-1')!,
         status: 'CONFIRMED',
-        bookingDate: new Date(Date.now() + 86400000).toISOString(),
-        totalPrice: 28,
-        createdAt: new Date().toISOString(),
-        confirmedAt: new Date().toISOString(),
+        bookingDate: getDateString(2),
+        totalPrice: 25,
+        createdAt: new Date(Date.now() - 172800000).toISOString(),
+        confirmedAt: new Date(Date.now() - 172800000).toISOString(),
     },
     {
         id: 'booking-002',
         userId: '1',
-        sessionId: 'session-4',
-        classSession: mockClassSessions[3],
+        sessionId: 'session-12',
+        classSession: enrichSessionForBooking('session-12')!,
         status: 'CONFIRMED',
-        bookingDate: new Date(Date.now() + 172800000).toISOString(),
-        totalPrice: 31,
-        createdAt: new Date().toISOString(),
-        confirmedAt: new Date().toISOString(),
-    },
-    {
-        id: 'booking-003',
-        userId: '1',
-        sessionId: 'session-7',
-        classSession: mockClassSessions[6],
-        status: 'CONFIRMED',
-        bookingDate: new Date(Date.now() - 86400000).toISOString(),
-        totalPrice: 23,
+        bookingDate: getDateString(2),
+        totalPrice: 28,
         createdAt: new Date(Date.now() - 86400000).toISOString(),
         confirmedAt: new Date(Date.now() - 86400000).toISOString(),
     },
     {
+        id: 'booking-003',
+        userId: '1',
+        sessionId: 'session-23',
+        classSession: enrichSessionForBooking('session-23')!,
+        status: 'CONFIRMED',
+        bookingDate: getDateString(1),
+        totalPrice: 20,
+        createdAt: new Date(Date.now() - 259200000).toISOString(),
+        confirmedAt: new Date(Date.now() - 259200000).toISOString(),
+    },
+    {
         id: 'booking-004',
         userId: '1',
-        sessionId: 'session-2',
-        classSession: mockClassSessions[1],
+        sessionId: 'session-33',
+        classSession: enrichSessionForBooking('session-33')!,
         status: 'CONFIRMED',
-        bookingDate: new Date(Date.now() - 172800000).toISOString(),
-        totalPrice: 33,
-        createdAt: new Date(Date.now() - 172800000).toISOString(),
-        confirmedAt: new Date(Date.now() - 172800000).toISOString(),
+        bookingDate: getDateString(-3),
+        totalPrice: 35,
+        createdAt: new Date(Date.now() - 345600000).toISOString(),
+        confirmedAt: new Date(Date.now() - 345600000).toISOString(),
     },
     {
         id: 'booking-005',
         userId: '1',
         sessionId: 'session-5',
-        classSession: mockClassSessions[4],
-        status: 'CONFIRMED',
-        bookingDate: new Date(Date.now() - 259200000).toISOString(),
-        totalPrice: 25,
-        createdAt: new Date(Date.now() - 259200000).toISOString(),
-        confirmedAt: new Date(Date.now() - 259200000).toISOString(),
+        classSession: enrichSessionForBooking('session-5')!,
+        status: 'CANCELLED',
+        bookingDate: getDateString(-7),
+        totalPrice: 30,
+        createdAt: new Date(Date.now() - 604800000).toISOString(),
+        cancelledAt: new Date(Date.now() - 518400000).toISOString(),
     },
 ];
 
@@ -472,7 +537,7 @@ export class MockGymFlowApi implements GymFlowApiContract {
     async createBooking(request: BookingRequest): Promise<ApiResponse<BookingResponse>> {
         await delay(800);
 
-        const session = mockClassSessions.find((s) => s.id === request.sessionId);
+        const session = mockClassSessions.find((s) => s.id === request.classSession);
 
         if (!session) {
             return {
@@ -505,13 +570,24 @@ export class MockGymFlowApi implements GymFlowApiContract {
             };
         }
 
+        const enrichedSession = enrichSessionForBooking(request.classSession);
+        if (!enrichedSession) {
+            return {
+                success: false,
+                error: 'Failed to create booking',
+            };
+        }
+
         const booking: Booking = {
             id: 'booking-' + Date.now(),
             userId: mockUsers[0].id,
-            sessionId: request.sessionId,
-            status: 'confirmed',
-            bookingDate: new Date().toISOString(),
-            totalPrice: classItem.price + 3,
+            sessionId: request.classSession,
+            classSession: enrichedSession,
+            status: 'CONFIRMED',
+            bookingDate: session.date,
+            totalPrice: request.amount,
+            createdAt: new Date().toISOString(),
+            confirmedAt: new Date().toISOString(),
         };
 
         mockBookings.push(booking);
@@ -520,15 +596,27 @@ export class MockGymFlowApi implements GymFlowApiContract {
         return {
             success: true,
             data: {
-                booking,
-                message: 'Booking confirmed successfully!',
+                url: `/booking-success?bookingId=${booking.id}`,
             },
         };
     }
 
-    async getUserBookings(userId: string): Promise<ApiResponse<Booking[]>> {
+    async getUserBookings(): Promise<ApiResponse<Booking[]>> {
         await delay(500);
-        const userBookings = mockBookings.filter((b) => b.userId === userId);
+        const token = localStorage.getItem('token');
+        if (!token) {
+            return {
+                success: false,
+                error: 'Not authenticated',
+            };
+        }
+
+        const userBookings = mockBookings
+            .filter((b) => b.userId === mockUsers[0].id)
+            .map(booking => ({
+                ...booking,
+                classSession: enrichSessionForBooking(booking.sessionId) || booking.classSession,
+            }));
 
         return {
             success: true,
