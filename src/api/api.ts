@@ -50,7 +50,8 @@ export class GymFlowApi implements GymFlowApiContract {
         };
       }
 
-      const data = await response.json();
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : undefined;
       return {
         success: true,
         data,
