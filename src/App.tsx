@@ -38,6 +38,7 @@ function App() {
                         <Route path="/class/:id" element={<ClassPage />} />
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/classes/manage" element={<AdminDashboardLayout />} />
+                        <Route path="/classes/manage/classes" element={<AdminDashboardLayout />} />
                         <Route path="/schedule" element={<ClassesPage />} />
                         <Route path="/booking/success" element={<BookingSuccessPage />} />
                     </Routes>
