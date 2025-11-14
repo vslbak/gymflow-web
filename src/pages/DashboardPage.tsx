@@ -251,7 +251,7 @@ export default function DashboardPage() {
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center space-x-3">
                                     <Award className="h-8 w-8 text-orange-600" />
-                                    <h2 className="text-2xl font-bold text-gray-900">Class History</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900">Past Classes</h2>
                                 </div>
                                 <div className="flex items-center space-x-2 bg-gradient-to-r from-orange-100 to-orange-50 px-4 py-2 rounded-lg">
                                     <TrendingUp className="h-5 w-5 text-orange-600" />
