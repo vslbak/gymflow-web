@@ -248,10 +248,66 @@ export default function DashboardPage() {
 
                     {pastBookings.length > 0 && (
                         <section>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Past Classes</h2>
+                            <div className="space-y-3">
+                                {pastBookings.map((booking) => (
+                                    <div
+                                        key={booking.id}
+                                        className="bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center space-x-4">
+                                            {booking.classSession?.gymflowClass && (
+                                                <img
+                                                    src={booking.classSession.gymflowClass.imageUrl}
+                                                    alt={booking.classSession.gymflowClass.name}
+                                                    className="w-16 h-16 rounded-lg object-cover"
+                                                />
+                                            )}
+                                            <div>
+                                                <h3 className="font-semibold text-gray-900">
+                                                    {booking.classSession?.gymflowClass?.name}
+                                                </h3>
+                                                <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                                                    <span className="flex items-center">
+                                                        <Calendar className="h-4 w-4 mr-1" />
+                                                        {new Date(booking.classSession?.date || booking.bookingDate).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </span>
+                                                    {booking.classSession?.gymflowClass?.instructor && (
+                                                        <span>{booking.classSession.gymflowClass.instructor}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-3">
+                                            <span className="text-green-600 font-semibold text-sm flex items-center">
+                                                <CheckCircle className="h-4 w-4 mr-1" />
+                                                Completed
+                                            </span>
+                                            {booking.classSession?.gymflowClass?.id && (
+                                                <Link
+                                                    to={`/class/${booking.classSession.gymflowClass.id}`}
+                                                    className="text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors"
+                                                >
+                                                    Book Again
+                                                </Link>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {pastBookings.length > 0 && false && (
+                        <section>
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center space-x-3">
                                     <Award className="h-8 w-8 text-orange-600" />
-                                    <h2 className="text-2xl font-bold text-gray-900">Past Classes</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900">Class History</h2>
                                 </div>
                                 <div className="flex items-center space-x-2 bg-gradient-to-r from-orange-100 to-orange-50 px-4 py-2 rounded-lg">
                                     <TrendingUp className="h-5 w-5 text-orange-600" />
