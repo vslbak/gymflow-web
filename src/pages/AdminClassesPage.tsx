@@ -9,6 +9,7 @@ import PageHeader from '../components/common/PageHeader';
 import LoadingSkeleton from '../components/common/LoadingSkeleton';
 import ConfirmModal from '../components/common/ConfirmModal';
 import Snackbar from '../components/common/Snackbar';
+import { parseIsoDuration, formatToIsoDuration, formatDurationDisplay } from '../utils/durationParser';
 
 export default function AdminClassesPage() {
   const { user } = useAuth();
@@ -36,6 +37,8 @@ export default function AdminClassesPage() {
     whatToBring: [],
   });
 
+  const [durationMinutes, setDurationMinutes] = useState<number>(60);
+
   useEffect(() => {
     if (user?.role !== 'ADMIN') {
       navigate('/');
@@ -60,10 +63,11 @@ export default function AdminClassesPage() {
 
   const handleOpenCreate = () => {
     setEditingClass(null);
+    setDurationMinutes(60);
     setFormData({
       name: '',
       instructor: '',
-      duration: '60 min',
+      duration: 'PT1H',
       totalSpots: 20,
       imageUrl: 'https://images.pexels.com/photos/416809/pexels-photo-416809.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Cardio',
@@ -80,6 +84,8 @@ export default function AdminClassesPage() {
 
   const handleOpenEdit = (cls: GymFlowClass) => {
     setEditingClass(cls);
+    const parsedMinutes = parseIsoDuration(cls.duration);
+    setDurationMinutes(parsedMinutes);
     const newFormData = {
       name: cls.name,
       instructor: cls.instructor,
@@ -101,10 +107,15 @@ export default function AdminClassesPage() {
 
   const handleSave = async () => {
     try {
+      const dataToSave = {
+        ...formData,
+        duration: formatToIsoDuration(durationMinutes),
+      };
+
       if (editingClass) {
         const updateData: UpdateClassRequest = {
           id: editingClass.id,
-          ...formData,
+          ...dataToSave,
         };
         const res = await api.updateClass(updateData);
         if (res.success) {
@@ -114,7 +125,7 @@ export default function AdminClassesPage() {
           setSnackbar({ message: res.error || 'Failed to update class', type: 'error' });
         }
       } else {
-        const res = await api.createClass(formData);
+        const res = await api.createClass(dataToSave);
         if (res.success) {
           setSnackbar({ message: 'Class created successfully', type: 'success' });
           fetchClasses();
@@ -296,15 +307,21 @@ export default function AdminClassesPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Duration
+                    Duration: {formatDurationDisplay(durationMinutes)}
                   </label>
                   <input
-                    type="text"
-                    value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    placeholder="e.g., 60 min"
+                    type="range"
+                    min="5"
+                    max="180"
+                    step="5"
+                    value={durationMinutes}
+                    onChange={(e) => setDurationMinutes(parseInt(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                   />
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>5m</span>
+                    <span>180m</span>
+                  </div>
                 </div>
               </div>
 
