@@ -214,20 +214,20 @@ export default function ClassPage() {
                         <div className="bg-white rounded-2xl shadow-lg p-8 sticky top-24">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Booking Summary</h2>
 
-                            <div className="space-y-4 mb-6 pb-6 border-b">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Class Fee</span>
-                                    <span className="font-semibold text-gray-900">${classItem.price}</span>
+                            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 mb-6">
+                                <p className="text-sm text-gray-600 mb-2">Class Price</p>
+                                <div className="flex items-baseline space-x-2 mb-4">
+                                    <span className="text-4xl font-bold text-orange-600">${classItem.price}</span>
+                                    <span className="text-gray-600">per session</span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Service Fee</span>
-                                    <span className="font-semibold text-gray-900">${classItem.serviceFee}</span>
+                                <div className="bg-white rounded p-3 border border-orange-200">
+                                    <p className="text-xs text-gray-600 font-medium">What's included</p>
+                                    <ul className="mt-2 space-y-1">
+                                        <li className="text-sm text-gray-700">✓ Class access</li>
+                                        <li className="text-sm text-gray-700">✓ Expert instruction</li>
+                                        <li className="text-sm text-gray-700">✓ Equipment (if needed)</li>
+                                    </ul>
                                 </div>
-                            </div>
-
-                            <div className="flex justify-between mb-6 text-lg">
-                                <span className="font-bold text-gray-900">Total</span>
-                                <span className="font-bold text-orange-600">${classItem.price + classItem.serviceFee}</span>
                             </div>
 
               {bookingError && (
@@ -261,7 +261,7 @@ export default function ClassPage() {
                     const response = await api.createBooking({
                       classSession: session.id,
                       className: classItem.name,
-                      amount: classItem.price + classItem.serviceFee,
+                      amount: classItem.price,
                     });
 
                     if (response.success && response.data) {
