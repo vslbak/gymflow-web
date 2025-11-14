@@ -3,17 +3,13 @@ import { Link } from 'react-router-dom';
 import { Calendar, Clock, MapPin, XCircle, CheckCircle, Award, TrendingUp } from 'lucide-react';
 import { api } from '../api/apiFactory';
 import { useAuth } from '../contexts/AuthContext';
-import type { Booking, GymFlowClass } from '../types';
+import type { Booking } from '../types';
 import LoadingSkeleton from '../components/common/LoadingSkeleton';
 import { formatDuration } from '../utils/formatDuration';
 
-interface BookingWithClass extends Booking {
-    class?: GymFlowClass;
-}
-
 export default function DashboardPage() {
     const { user } = useAuth();
-    const [bookings, setBookings] = useState<BookingWithClass[]>([]);
+    const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -23,20 +19,7 @@ export default function DashboardPage() {
             try {
                 const response = await api.getUserBookings();
                 if (response.success && response.data) {
-                    const classesResponse = await api.getClasses();
-                    const allClasses = classesResponse.success ? classesResponse.data || [] : [];
-
-                    const bookingsWithClasses = response.data.map((booking) => {
-                        const classId = booking.classSession?.classId;
-                        const foundClass = classId ? allClasses.find(c => c.id === classId) : undefined;
-
-                        return {
-                            ...booking,
-                            class: foundClass,
-                        };
-                    });
-
-                    setBookings(bookingsWithClasses);
+                    setBookings(response.data);
                 }
             } catch (error) {
                 console.error('Failed to fetch bookings:', error);
@@ -184,11 +167,11 @@ export default function DashboardPage() {
                                             className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all"
                                         >
                                             <div className="md:flex">
-                                                {booking.class && (
+                                                {booking.classSession?.gymflowClass && (
                                                     <div className="md:w-64 h-48 md:h-auto">
                                                         <img
-                                                            src={booking.class.imageUrl}
-                                                            alt={booking.class.name}
+                                                            src={booking.classSession.gymflowClass.imageUrl}
+                                                            alt={booking.classSession.gymflowClass.name}
                                                             className="w-full h-full object-cover"
                                                         />
                                                     </div>
@@ -197,10 +180,10 @@ export default function DashboardPage() {
                                                     <div className="flex items-start justify-between mb-4">
                                                         <div>
                                                             <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                                                                {booking.class?.name || 'Class Details Loading...'}
+                                                                {booking.classSession?.gymflowClass?.name || 'Class Details Loading...'}
                                                             </h3>
-                                                            {booking.class?.instructor && (
-                                                                <p className="text-gray-600">with {booking.class.instructor}</p>
+                                                            {booking.classSession?.gymflowClass?.instructor && (
+                                                                <p className="text-gray-600">with {booking.classSession.gymflowClass.instructor}</p>
                                                             )}
                                                         </div>
                                                         <span className={`${config.bg} ${config.text} px-3 py-1 rounded-full text-sm font-semibold`}>
@@ -213,16 +196,16 @@ export default function DashboardPage() {
                                                             <Calendar className="h-5 w-5 text-orange-600 mr-2" />
                                                             {booking.classSession?.date || booking.bookingDate || 'Date TBD'}
                                                         </div>
-                                                        {booking.class?.duration && (
+                                                        {booking.classSession?.gymflowClass?.duration && (
                                                             <div className="flex items-center text-gray-600">
                                                                 <Clock className="h-5 w-5 text-orange-600 mr-2" />
-                                                                {formatDuration(booking.class.duration)}
+                                                                {formatDuration(booking.classSession.gymflowClass.duration)}
                                                             </div>
                                                         )}
-                                                        {booking.class?.location && (
+                                                        {booking.classSession?.gymflowClass?.location && (
                                                             <div className="flex items-center text-gray-600">
                                                                 <MapPin className="h-5 w-5 text-orange-600 mr-2" />
-                                                                {booking.class.location}
+                                                                {booking.classSession.gymflowClass.location}
                                                             </div>
                                                         )}
                                                         {booking.totalPrice !== undefined && (
@@ -238,9 +221,9 @@ export default function DashboardPage() {
                                                     </div>
 
                                                     <div className="flex space-x-4">
-                                                        {booking.class?.id && (
+                                                        {booking.classSession?.gymflowClass?.id && (
                                                             <Link
-                                                                to={`/class/${booking.class.id}`}
+                                                                to={`/class/${booking.classSession.gymflowClass.id}`}
                                                                 className="bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors"
                                                             >
                                                                 View Details
@@ -283,11 +266,11 @@ export default function DashboardPage() {
                                         key={booking.id}
                                         className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all group"
                                     >
-                                        {booking.class && (
+                                        {booking.classSession?.gymflowClass && (
                                             <div className="relative h-40 overflow-hidden">
                                                 <img
-                                                    src={booking.class.imageUrl}
-                                                    alt={booking.class.name}
+                                                    src={booking.classSession.gymflowClass.imageUrl}
+                                                    alt={booking.classSession.gymflowClass.name}
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
@@ -299,17 +282,17 @@ export default function DashboardPage() {
                                                 </div>
                                                 <div className="absolute bottom-3 left-3 right-3">
                                                     <h3 className="text-white font-bold text-lg leading-tight">
-                                                        {booking.class.name}
+                                                        {booking.classSession.gymflowClass.name}
                                                     </h3>
                                                 </div>
                                             </div>
                                         )}
                                         <div className="p-5">
                                             <div className="space-y-2 mb-4">
-                                                {booking.class?.instructor && (
+                                                {booking.classSession?.gymflowClass?.instructor && (
                                                     <div className="flex items-center text-gray-600 text-sm">
                                                         <div className="w-2 h-2 bg-orange-600 rounded-full mr-2"></div>
-                                                        <span className="font-medium">{booking.class.instructor}</span>
+                                                        <span className="font-medium">{booking.classSession.gymflowClass.instructor}</span>
                                                     </div>
                                                 )}
                                                 <div className="flex items-center text-gray-600 text-sm">
@@ -322,21 +305,21 @@ export default function DashboardPage() {
                                                         })}
                                                     </span>
                                                 </div>
-                                                {booking.class?.duration && (
+                                                {booking.classSession?.gymflowClass?.duration && (
                                                     <div className="flex items-center text-gray-600 text-sm">
                                                         <Clock className="h-4 w-4 text-orange-600 mr-2" />
-                                                        <span>{formatDuration(booking.class.duration)}</span>
+                                                        <span>{formatDuration(booking.classSession.gymflowClass.duration)}</span>
                                                     </div>
                                                 )}
                                             </div>
-                                            {booking.class?.category && (
+                                            {booking.classSession?.gymflowClass?.category && (
                                                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                                                     <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                                                        {booking.class.category}
+                                                        {booking.classSession.gymflowClass.category}
                                                     </span>
-                                                    {booking.class?.id && (
+                                                    {booking.classSession?.gymflowClass?.id && (
                                                         <Link
-                                                            to={`/class/${booking.class.id}`}
+                                                            to={`/class/${booking.classSession.gymflowClass.id}`}
                                                             className="text-xs font-semibold text-orange-600 hover:text-orange-700 transition-colors"
                                                         >
                                                             Book Again →
@@ -364,10 +347,10 @@ export default function DashboardPage() {
                                             <XCircle className="h-8 w-8 text-gray-400" />
                                             <div>
                                                 <h3 className="text-lg font-bold text-gray-700">
-                                                    {booking.class?.name}
+                                                    {booking.classSession?.gymflowClass?.name}
                                                 </h3>
                                                 <p className="text-gray-500">
-                                                    {booking.class?.time} • {booking.class?.instructor}
+                                                    {booking.classSession?.gymflowClass?.time} • {booking.classSession?.gymflowClass?.instructor}
                                                 </p>
                                             </div>
                                         </div>
