@@ -77,7 +77,7 @@ export default function DashboardPage() {
         if (status === 'SUCCESS' && bookingDate <= new Date()) {
             return true;
         }
-        return status === 'PENDING' || status === 'FAILED' || status === 'CANCELLED';
+        return status === 'FAILED' || status === 'CANCELLED';
     });
 
     const cancelledBookings = bookings.filter((b) => normalizeStatus(b.status) === 'CANCELLED');
@@ -153,7 +153,7 @@ export default function DashboardPage() {
                 <div className="space-y-8">
                     <section>
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Upcoming Classes</h2>
-                        {upcomingBookings.length === 0 ? (
+                        {upcomingBookings.length === 0 && pendingBookings.length === 0 && (
                             <div className="bg-white rounded-2xl p-8 text-center shadow-lg">
                                 <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                                 <p className="text-gray-600 mb-4">No upcoming classes booked</p>
@@ -164,7 +164,8 @@ export default function DashboardPage() {
                                     Browse Classes
                                 </Link>
                             </div>
-                        ) : (
+                        )}
+                        {upcomingBookings.length > 0 && (
                             <div className="space-y-4">
                                 {upcomingBookings.map((booking) => {
                                     const status = normalizeStatus(booking.status);
@@ -179,9 +180,9 @@ export default function DashboardPage() {
                                             key={booking.id}
                                             className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all"
                                         >
-                                            <div className="md:flex">
+                                            <div className="md:flex md:h-56">
                                                 {booking.classSession?.gymflowClass && (
-                                                    <div className="md:w-64 h-48 md:h-auto">
+                                                    <div className="md:w-64 h-48 md:h-full flex-shrink-0">
                                                         <img
                                                             src={booking.classSession.gymflowClass.imageUrl}
                                                             alt={booking.classSession.gymflowClass.name}
@@ -259,6 +260,52 @@ export default function DashboardPage() {
                         )}
                     </section>
 
+                    {pendingBookings.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Pending Bookings</h2>
+                            <div className="space-y-3">
+                                {pendingBookings.map((booking) => (
+                                    <div
+                                        key={booking.id}
+                                        className="bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center space-x-4">
+                                            {booking.classSession?.gymflowClass && (
+                                                <img
+                                                    src={booking.classSession.gymflowClass.imageUrl}
+                                                    alt={booking.classSession.gymflowClass.name}
+                                                    className="w-16 h-16 rounded-lg object-cover"
+                                                />
+                                            )}
+                                            <div>
+                                                <h3 className="font-semibold text-gray-900">
+                                                    {booking.classSession?.gymflowClass?.name}
+                                                </h3>
+                                                <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                                                    <span className="flex items-center">
+                                                        <Calendar className="h-4 w-4 mr-1" />
+                                                        {new Date(booking.classSession?.date || booking.bookingDate).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            year: 'numeric'
+                                                        })}
+                                                    </span>
+                                                    {booking.classSession?.gymflowClass?.instructor && (
+                                                        <span>{booking.classSession.gymflowClass.instructor}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span className="text-yellow-600 font-semibold text-sm flex items-center">
+                                            <Clock className="h-4 w-4 mr-1" />
+                                            Pending
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
                     {pastBookings.length > 0 && (
                         <section>
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">Past Classes</h2>
@@ -311,12 +358,6 @@ export default function DashboardPage() {
                                                         </Link>
                                                     )}
                                                 </>
-                                            )}
-                                            {normalizeStatus(booking.status) === 'PENDING' && (
-                                                <span className="text-yellow-600 font-semibold text-sm flex items-center">
-                                                    <Clock className="h-4 w-4 mr-1" />
-                                                    Pending
-                                                </span>
                                             )}
                                             {normalizeStatus(booking.status) === 'FAILED' && (
                                                 <span className="text-red-600 font-semibold text-sm flex items-center">
