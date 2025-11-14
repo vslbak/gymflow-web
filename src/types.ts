@@ -19,13 +19,12 @@ export interface GymFlowClass {
   description: string;
   price: number;
   time: string;
-  serviceFee: number;
   whatToBring?: string[];
 }
 
 export interface ClassSession {
   id: string;
-  classId: string;
+  gymflowClass: GymFlowClass;
   date: string;
   spotsLeft: number;
 }
@@ -33,7 +32,6 @@ export interface ClassSession {
 export interface Booking {
   id: string;
   userId: string;
-  sessionId: string;
   classSession: ClassSession;
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
   bookingDate: string;
