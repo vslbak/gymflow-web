@@ -48,7 +48,9 @@ export default function AdminClassesPage() {
   const fetchClasses = async () => {
     try {
       const res = await api.getClasses();
+      console.log('Fetched classes response:', res);
       if (res.success && res.data) {
+        console.log('First class daysOfWeek:', res.data[0]?.daysOfWeek);
         setClasses(res.data);
       }
     } catch (err) {
