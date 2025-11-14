@@ -48,10 +48,11 @@ export default function DashboardPage() {
         try {
             const response = await api.cancelBooking(bookingId);
             if (response.success) {
+                const bookingsResponse = await api.getUserBookings();
+                if (bookingsResponse.success && bookingsResponse.data) {
+                    setBookings(bookingsResponse.data);
+                }
                 setSnackbar({ isVisible: true, message: 'Booking cancelled. You will be refunded soon.', type: 'success' });
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2500);
             } else {
                 setSnackbar({ isVisible: true, message: response.error || 'Failed to cancel booking.', type: 'error' });
             }
