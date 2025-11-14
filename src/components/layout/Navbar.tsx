@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Dumbbell, User, LogOut } from 'lucide-react';
+import { Dumbbell, User, LogOut, Shield } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function Navbar() {
@@ -29,6 +29,15 @@ export default function Navbar() {
             </Link>
             {isAuthenticated ? (
               <>
+                {user?.role === 'ADMIN' && (
+                  <Link
+                    to="/admin"
+                    className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
+                  >
+                    <Shield className="h-5 w-5" />
+                    <span>Admin</span>
+                  </Link>
+                )}
                 <Link
                   to="/dashboard"
                   className="flex items-center space-x-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"

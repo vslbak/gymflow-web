@@ -12,6 +12,7 @@ import SignupPage from './pages/SignupPage';
 import ClassPage from './pages/ClassPage';
 import DashboardPage from './pages/DashboardPage';
 import BookingSuccessPage from './pages/BookingSuccessPage';
+import AdminPage from './pages/AdminPage';
 
 function HomePage() {
     return (
@@ -36,6 +37,7 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/class/:id" element={<ClassPage />} />
                         <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/admin" element={<AdminPage />} />
                         <Route path="/schedule" element={<ClassesPage />} />
                         <Route path="/booking/success" element={<BookingSuccessPage />} />
                     </Routes>

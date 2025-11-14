@@ -311,6 +311,13 @@ const mockUsers: User[] = [
         phone: '+1 (555) 123-4567',
         role: 'USER',
     },
+    {
+        id: '2',
+        email: 'admin@gymflow.com',
+        username: 'Admin User',
+        phone: '+1 (555) 999-0000',
+        role: 'ADMIN',
+    },
 ];
 
 const enrichSessionForBooking = (sessionId: string): ClassSession | null => {
@@ -456,10 +463,13 @@ export class MockGymFlowApi implements GymFlowApiContract {
             };
         }
 
+        const token = `mock-jwt-token-${user.id}-${Date.now()}`;
+        localStorage.setItem('mockUserId', user.id);
+
         return {
             success: true,
             data: {
-                accessToken: 'mock-jwt-token-' + Date.now(),
+                accessToken: token,
                 expiresIn: 3600,
                 refreshToken: 'mock-refresh-token-' + Date.now(),
             },
@@ -476,9 +486,12 @@ export class MockGymFlowApi implements GymFlowApiContract {
             };
         }
 
+        const userId = localStorage.getItem('mockUserId') || '1';
+        const user = mockUsers.find(u => u.id === userId) || mockUsers[0];
+
         return {
             success: true,
-            data: mockUsers[0],
+            data: user,
         };
     }
 
