@@ -179,9 +179,13 @@ export default function ClassPage() {
                                                 <Users className="h-6 w-6 text-orange-600 mt-1" />
                                                 <div>
                                                     <p className="font-semibold text-gray-900">Availability</p>
-                                                    <p className={session.spotsLeft <= 5 ? 'text-orange-600 font-semibold' : 'text-gray-600'}>
-                                                        {session.spotsLeft} spots left of {classItem.totalSpots}
-                                                    </p>
+                                                    {session.spotsLeft === 0 ? (
+                                                        <p className="text-red-600 font-bold">Fully Booked</p>
+                                                    ) : (
+                                                        <p className={session.spotsLeft <= 5 ? 'text-orange-600 font-semibold' : 'text-gray-600'}>
+                                                            {session.spotsLeft} spots left of {classItem.totalSpots}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
                                         </>
