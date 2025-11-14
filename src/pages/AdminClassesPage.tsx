@@ -444,8 +444,8 @@ export default function AdminClassesPage() {
                   </label>
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
-                      const dayLower = day.toLowerCase();
-                      const isChecked = formData.daysOfWeek?.some(d => d.toLowerCase() === dayLower) || false;
+                      const dayUpper = day.toUpperCase();
+                      const isChecked = formData.daysOfWeek?.some(d => d.toUpperCase() === dayUpper) || false;
                       return (
                         <label key={day} className="flex items-center space-x-2 cursor-pointer">
                           <input
@@ -454,9 +454,9 @@ export default function AdminClassesPage() {
                             onChange={(e) => {
                               const currentDays = formData.daysOfWeek || [];
                               if (e.target.checked) {
-                                setFormData({ ...formData, daysOfWeek: [...currentDays, day] });
+                                setFormData({ ...formData, daysOfWeek: [...currentDays, dayUpper] });
                               } else {
-                                setFormData({ ...formData, daysOfWeek: currentDays.filter(d => d !== day) });
+                                setFormData({ ...formData, daysOfWeek: currentDays.filter(d => d !== dayUpper) });
                               }
                             }}
                             className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
