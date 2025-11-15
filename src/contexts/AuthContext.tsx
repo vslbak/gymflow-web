@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import type { User, LoginResponse } from '../types';
 import { api } from '../api/apiFactory';
 
@@ -18,7 +18,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshTokenAsync = async () => {
+  const logout = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenExpiry');
+  }, []);
+
+  const refreshTokenAsync = useCallback(async () => {
     try {
       const response = await api.refreshToken();
 
@@ -33,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Token refresh failed:', error);
       logout();
     }
-  };
+  }, [logout]);
 
   useEffect(() => {
     const initAuth = async () => {
@@ -65,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     initAuth();
-  }, []);
+  }, [refreshTokenAsync]);
 
   useEffect(() => {
     const tokenExpiry = localStorage.getItem('tokenExpiry');
@@ -89,12 +96,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refreshTime = timeUntilExpiry * 0.2;
     }
 
+    console.log(`Setting refresh timeout: ${refreshTime}ms (expires in ${timeUntilExpiry}ms)`);
+
     const timeout = setTimeout(() => {
+      console.log('Executing token refresh now');
       refreshTokenAsync();
     }, refreshTime);
 
     return () => clearTimeout(timeout);
-  }, [token]);
+  }, [token, refreshTokenAsync]);
 
   const login = async (loginResponse: LoginResponse) => {
     const { accessToken, expiresIn } = loginResponse;
@@ -112,12 +122,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('tokenExpiry');
-  };
 
   return (
     <AuthContext.Provider
