@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback, useRef } from 'react';
 import type { User, LoginResponse } from '../types';
 import { api } from '../api/apiFactory';
 
@@ -17,15 +17,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const logout = useCallback(() => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiry');
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current);
+      refreshTimeoutRef.current = null;
+    }
   }, []);
 
-  const refreshTokenAsync = useCallback(async () => {
+  const refreshTokenAsync = async () => {
     console.log('Refreshing token...');
     try {
       const response = await api.refreshToken();
@@ -40,13 +45,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('tokenExpiry', String(newExpiry));
       } else {
         console.error('Token refresh failed:', response.error);
-        logout();
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('tokenExpiry');
       }
     } catch (error) {
       console.error('Token refresh error:', error);
-      logout();
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenExpiry');
     }
-  }, [logout]);
+  };
 
   useEffect(() => {
     const initAuth = async () => {
@@ -79,9 +90,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     initAuth();
-  }, [refreshTokenAsync]);
+  }, []);
 
   useEffect(() => {
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current);
+      refreshTimeoutRef.current = null;
+    }
+
     if (!token) {
       console.log('No token, skipping refresh timer');
       return;
@@ -116,16 +132,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     console.log(`Setting refresh timeout for ${refreshTime}ms (${Math.floor(refreshTime/1000)}s)`);
 
-    const timeout = setTimeout(() => {
+    refreshTimeoutRef.current = setTimeout(() => {
       console.log('Timeout triggered, refreshing token now');
       refreshTokenAsync();
     }, refreshTime);
 
     return () => {
-      console.log('Clearing refresh timeout');
-      clearTimeout(timeout);
+      if (refreshTimeoutRef.current) {
+        console.log('Clearing refresh timeout');
+        clearTimeout(refreshTimeoutRef.current);
+        refreshTimeoutRef.current = null;
+      }
     };
-  }, [token, refreshTokenAsync]);
+  }, [token]);
 
   const login = async (loginResponse: LoginResponse) => {
     const { accessToken, expiresIn } = loginResponse;
