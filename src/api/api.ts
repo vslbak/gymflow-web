@@ -106,10 +106,36 @@ export class GymFlowApi implements GymFlowApiContract {
   }
 
   async refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<LoginResponse>> {
-    return this.request<LoginResponse>('/auth/refresh', {
-      method: 'POST',
-      body: JSON.stringify(request),
-    });
+    try {
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      const response = await fetch(`${this.baseUrl}/auth/refresh`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(request),
+      });
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: `HTTP error: ${response.status} ${response.statusText}`,
+        };
+      }
+
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : undefined;
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error occurred',
+      };
+    }
   }
 
   async getCurrentUser(token: string): Promise<ApiResponse<User>> {
