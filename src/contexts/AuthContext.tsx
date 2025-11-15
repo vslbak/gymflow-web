@@ -26,25 +26,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const refreshTokenAsync = useCallback(async () => {
+    console.log('Refreshing token...');
     try {
       const response = await api.refreshToken();
 
       if (response.success && response.data) {
-        setToken(response.data.accessToken);
-        localStorage.setItem('token', response.data.accessToken);
-        localStorage.setItem('tokenExpiry', String(Date.now() + response.data.expiresIn * 1000));
+        console.log('Token refreshed successfully, new expiry:', response.data.expiresIn);
+        const newToken = response.data.accessToken;
+        const newExpiry = Date.now() + response.data.expiresIn * 1000;
+
+        setToken(newToken);
+        localStorage.setItem('token', newToken);
+        localStorage.setItem('tokenExpiry', String(newExpiry));
       } else {
+        console.error('Token refresh failed:', response.error);
         logout();
       }
     } catch (error) {
-      console.error('Token refresh failed:', error);
+      console.error('Token refresh error:', error);
       logout();
     }
   }, [logout]);
 
   useEffect(() => {
     const initAuth = async () => {
-    const storedToken = localStorage.getItem('token');
+      const storedToken = localStorage.getItem('token');
       const tokenExpiry = localStorage.getItem('tokenExpiry');
 
       if (storedToken && tokenExpiry) {
@@ -52,22 +58,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const now = Date.now();
 
         if (now >= expiryTime) {
+          console.log('Token expired on init, refreshing');
           await refreshTokenAsync();
         } else {
-      try {
-          const response = await api.getCurrentUser(storedToken);
-          if (response.success && response.data) {
-            setUser(response.data);
-      setToken(storedToken);
-          } else {
+          try {
+            const response = await api.getCurrentUser(storedToken);
+            if (response.success && response.data) {
+              setUser(response.data);
+              setToken(storedToken);
+            } else {
               await refreshTokenAsync();
-          }
-      } catch (error) {
-          console.error('Failed to fetch user data:', error);
+            }
+          } catch (error) {
+            console.error('Failed to fetch user data:', error);
             await refreshTokenAsync();
           }
+        }
       }
-    }
       setLoading(false);
     };
 
@@ -75,14 +82,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refreshTokenAsync]);
 
   useEffect(() => {
+    if (!token) {
+      console.log('No token, skipping refresh timer');
+      return;
+    }
+
     const tokenExpiry = localStorage.getItem('tokenExpiry');
-    if (!tokenExpiry || !token) return;
+    if (!tokenExpiry) {
+      console.log('No tokenExpiry found');
+      return;
+    }
 
     const expiryTime = parseInt(tokenExpiry, 10);
     const now = Date.now();
     const timeUntilExpiry = expiryTime - now;
 
+    console.log(`Token expires in ${timeUntilExpiry}ms (${Math.floor(timeUntilExpiry/1000)}s)`);
+
     if (timeUntilExpiry <= 0) {
+      console.log('Token already expired, refreshing immediately');
       refreshTokenAsync();
       return;
     }
@@ -93,17 +111,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (timeUntilExpiry > oneMinute) {
       refreshTime = timeUntilExpiry - oneMinute;
     } else {
-      refreshTime = timeUntilExpiry * 0.2;
+      refreshTime = Math.max(timeUntilExpiry * 0.8, 1000);
     }
 
-    console.log(`Setting refresh timeout: ${refreshTime}ms (expires in ${timeUntilExpiry}ms)`);
+    console.log(`Setting refresh timeout for ${refreshTime}ms (${Math.floor(refreshTime/1000)}s)`);
 
     const timeout = setTimeout(() => {
-      console.log('Executing token refresh now');
+      console.log('Timeout triggered, refreshing token now');
       refreshTokenAsync();
     }, refreshTime);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      console.log('Clearing refresh timeout');
+      clearTimeout(timeout);
+    };
   }, [token, refreshTokenAsync]);
 
   const login = async (loginResponse: LoginResponse) => {
