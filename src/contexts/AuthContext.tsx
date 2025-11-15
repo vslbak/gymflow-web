@@ -19,19 +19,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refreshTokenAsync = async () => {
-    const storedRefreshToken = localStorage.getItem('refreshToken');
-    if (!storedRefreshToken) {
-      logout();
-      return;
-    }
-
     try {
-      const response = await api.refreshToken({ refreshToken: storedRefreshToken });
+      const response = await api.refreshToken();
 
       if (response.success && response.data) {
         setToken(response.data.accessToken);
         localStorage.setItem('token', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
         localStorage.setItem('tokenExpiry', String(Date.now() + response.data.expiresIn * 1000));
       } else {
         logout();
@@ -104,10 +97,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [token]);
 
   const login = async (loginResponse: LoginResponse) => {
-    const { accessToken, refreshToken: refresh, expiresIn } = loginResponse;
+    const { accessToken, expiresIn } = loginResponse;
     setToken(accessToken);
     localStorage.setItem('token', accessToken);
-    localStorage.setItem('refreshToken', refresh);
     localStorage.setItem('tokenExpiry', String(Date.now() + expiresIn * 1000));
 
     try {
@@ -124,7 +116,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
     localStorage.removeItem('tokenExpiry');
   };
 

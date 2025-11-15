@@ -1,4 +1,4 @@
-import type { GymFlowApiContract, RefreshTokenRequest, CreateClassRequest, UpdateClassRequest } from './base';
+import type { GymFlowApiContract, CreateClassRequest, UpdateClassRequest } from './base';
 import type {
   GymFlowClass,
   ClassSession,
@@ -105,16 +105,20 @@ export class GymFlowApi implements GymFlowApiContract {
     });
   }
 
-  async refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<LoginResponse>> {
+  async refreshToken(): Promise<ApiResponse<LoginResponse>> {
     try {
+      const token = this.getAuthToken();
       const headers: HeadersInit = {
         'Content-Type': 'application/json',
       };
 
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch(`${this.baseUrl}/auth/refresh`, {
         method: 'POST',
         headers,
-        body: JSON.stringify(request),
       });
 
       if (!response.ok) {

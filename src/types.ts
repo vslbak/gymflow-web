@@ -56,7 +56,6 @@ export interface SignupRequest {
 export interface LoginResponse {
   accessToken: string;
   expiresIn: number;
-  refreshToken: string;
 }
 
 export interface BookingRequest {
