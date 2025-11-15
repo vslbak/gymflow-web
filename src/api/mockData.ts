@@ -648,7 +648,7 @@ export class MockGymFlowApi implements GymFlowApiContract {
             success: true,
             data: {
                 accessToken: token,
-                expiresIn: 3600,
+                expiresIn: 10000,
                 refreshToken: 'mock-refresh-token-' + Date.now(),
             },
         };
@@ -699,7 +699,7 @@ export class MockGymFlowApi implements GymFlowApiContract {
             success: true,
             data: {
                 accessToken: 'mock-jwt-token-' + Date.now(),
-                expiresIn: 3600,
+                expiresIn: 10000,
                 refreshToken: 'mock-refresh-token-' + Date.now(),
             },
         };
@@ -719,7 +719,7 @@ export class MockGymFlowApi implements GymFlowApiContract {
             success: true,
             data: {
                 accessToken: 'mock-jwt-token-' + Date.now(),
-                expiresIn: 3600,
+                expiresIn: 10000,
                 refreshToken: 'mock-refresh-token-' + Date.now(),
             },
         };
