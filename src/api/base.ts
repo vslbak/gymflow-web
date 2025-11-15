@@ -33,6 +33,8 @@ export interface UpdateClassRequest extends Partial<CreateClassRequest> {
 }
 
 export interface GymFlowApiContract {
+  setUnauthorizedHandler(handler: () => void): void;
+
   getClasses(): Promise<ApiResponse<GymFlowClass[]>>;
 
   getClassSessions(): Promise<ApiResponse<ClassSession[]>>;

@@ -14,9 +14,14 @@ import type {
 
 export class GymFlowApi implements GymFlowApiContract {
   private baseUrl: string;
+  private onUnauthorized?: () => void;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  }
+
+  setUnauthorizedHandler(handler: () => void) {
+    this.onUnauthorized = handler;
   }
 
   private getAuthToken(): string | null {
@@ -44,6 +49,9 @@ export class GymFlowApi implements GymFlowApiContract {
       });
 
       if (!response.ok) {
+        if (response.status === 401 && this.onUnauthorized) {
+          this.onUnauthorized();
+        }
         return {
           success: false,
           error: `HTTP error: ${response.status} ${response.statusText}`,
@@ -122,6 +130,9 @@ export class GymFlowApi implements GymFlowApiContract {
       });
 
       if (!response.ok) {
+        if (response.status === 401 && this.onUnauthorized) {
+          this.onUnauthorized();
+        }
         return {
           success: false,
           error: `HTTP error: ${response.status} ${response.statusText}`,

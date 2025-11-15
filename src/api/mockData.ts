@@ -574,6 +574,9 @@ const mockBookings: Booking[] = [
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class MockGymFlowApi implements GymFlowApiContract {
+    setUnauthorizedHandler(handler: () => void) {
+    }
+
     async getClasses(): Promise<ApiResponse<GymFlowClass[]>> {
         await delay(500);
         return {

@@ -52,6 +52,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    api.setUnauthorizedHandler(() => {
+      logout();
+    });
+
     const initAuth = async () => {
       const storedToken = localStorage.getItem('token');
       const tokenExpiry = localStorage.getItem('tokenExpiry');
@@ -75,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     initAuth();
-  }, []);
+  }, [logout]);
 
   useEffect(() => {
     if (refreshTimeoutRef.current) {
