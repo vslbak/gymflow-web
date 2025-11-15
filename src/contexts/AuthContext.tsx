@@ -93,53 +93,61 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (refreshTimeoutRef.current) {
-      clearTimeout(refreshTimeoutRef.current);
-      refreshTimeoutRef.current = null;
-    }
-
     if (!token) {
       console.log('No token, skipping refresh timer');
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+        refreshTimeoutRef.current = null;
+      }
       return;
     }
 
-    const tokenExpiry = localStorage.getItem('tokenExpiry');
-    if (!tokenExpiry) {
-      console.log('No tokenExpiry found');
-      return;
-    }
+    const scheduleRefresh = () => {
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+        refreshTimeoutRef.current = null;
+      }
 
-    const expiryTime = parseInt(tokenExpiry, 10);
-    const now = Date.now();
-    const timeUntilExpiry = expiryTime - now;
+      const tokenExpiry = localStorage.getItem('tokenExpiry');
+      if (!tokenExpiry) {
+        console.log('No tokenExpiry found');
+        return;
+      }
 
-    console.log(`Token expires in ${timeUntilExpiry}ms (${Math.floor(timeUntilExpiry/1000)}s)`);
+      const expiryTime = parseInt(tokenExpiry, 10);
+      const now = Date.now();
+      const timeUntilExpiry = expiryTime - now;
 
-    if (timeUntilExpiry <= 0) {
-      console.log('Token already expired, refreshing immediately');
-      refreshTokenAsync();
-      return;
-    }
+      console.log(`Token expires in ${timeUntilExpiry}ms (${Math.floor(timeUntilExpiry/1000)}s)`);
 
-    const oneMinute = 60000;
-    let refreshTime: number;
+      if (timeUntilExpiry <= 0) {
+        console.log('Token already expired, refreshing immediately');
+        refreshTokenAsync();
+        return;
+      }
 
-    if (timeUntilExpiry > oneMinute) {
-      refreshTime = timeUntilExpiry - oneMinute;
-    } else {
-      refreshTime = Math.max(timeUntilExpiry * 0.8, 1000);
-    }
+      const oneMinute = 60000;
+      let refreshTime: number;
 
-    console.log(`Setting refresh timeout for ${refreshTime}ms (${Math.floor(refreshTime/1000)}s)`);
+      if (timeUntilExpiry > oneMinute) {
+        refreshTime = timeUntilExpiry - oneMinute;
+      } else {
+        refreshTime = Math.max(timeUntilExpiry * 0.8, 1000);
+      }
 
-    refreshTimeoutRef.current = setTimeout(() => {
-      console.log('Timeout triggered, refreshing token now');
-      refreshTokenAsync();
-    }, refreshTime);
+      console.log(`Setting refresh timeout for ${refreshTime}ms (${Math.floor(refreshTime/1000)}s)`);
+
+      refreshTimeoutRef.current = setTimeout(() => {
+        console.log('Timeout triggered, refreshing token now');
+        refreshTokenAsync();
+      }, refreshTime);
+    };
+
+    scheduleRefresh();
 
     return () => {
       if (refreshTimeoutRef.current) {
-        console.log('Clearing refresh timeout');
+        console.log('Clearing refresh timeout on unmount/token change');
         clearTimeout(refreshTimeoutRef.current);
         refreshTimeoutRef.current = null;
       }
