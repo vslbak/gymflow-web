@@ -87,7 +87,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const refreshTime = timeUntilExpiry - 60000;
+    const refreshBuffer = 5 * 60 * 1000;
+    const refreshTime = Math.max(0, timeUntilExpiry - refreshBuffer);
+
     const timeout = setTimeout(() => {
       refreshTokenAsync();
     }, refreshTime);
