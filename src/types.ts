@@ -36,7 +36,6 @@ export interface Booking {
   classSession: ClassSession;
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
   bookingDate: string;
-  totalPrice: number;
   createdAt: string;
   confirmedAt: string | null;
 }

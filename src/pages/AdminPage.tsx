@@ -54,7 +54,7 @@ export default function AdminPage() {
 
   const totalRevenue = bookings
     .filter(b => b.status === 'CONFIRMED')
-    .reduce((sum, b) => sum + b.totalPrice, 0);
+    .reduce((sum, b) => sum + b.classSession.gymflowClass.price, 0);
 
   const totalBookings = bookings.length;
   const confirmedBookings = bookings.filter(b => b.status === 'CONFIRMED').length;
@@ -65,7 +65,7 @@ export default function AdminPage() {
   last7Days.setDate(last7Days.getDate() - 7);
   const recentRevenue = bookings
     .filter(b => b.status === 'CONFIRMED' && new Date(b.createdAt) > last7Days)
-    .reduce((sum, b) => sum + b.totalPrice, 0);
+    .reduce((sum, b) => sum + b.classSession.gymflowClass.price, 0);
 
   const recentBookingsCount = bookings.filter(b => new Date(b.createdAt) > last7Days).length;
 
@@ -81,7 +81,7 @@ export default function AdminPage() {
       return {
         ...cls,
         bookingCount: classBookings.length,
-        revenue: classBookings.reduce((sum, b) => sum + b.totalPrice, 0),
+        revenue: classBookings.reduce((sum, b) => sum + b.classSession.gymflowClass.price, 0),
       };
     })
     .sort((a, b) => b.bookingCount - a.bookingCount)
@@ -97,7 +97,7 @@ export default function AdminPage() {
       acc[cls.category] = { count: 0, revenue: 0 };
     }
     acc[cls.category].count += count;
-    acc[cls.category].revenue += classBookings.reduce((sum, b) => sum + b.totalPrice, 0);
+    acc[cls.category].revenue += classBookings.reduce((sum, b) => sum + b.classSession.gymflowClass.price, 0);
     return acc;
   }, {} as Record<string, { count: number; revenue: number }>);
 
@@ -115,7 +115,7 @@ export default function AdminPage() {
       acc[cls.instructor] = { count: 0, revenue: 0 };
     }
     acc[cls.instructor].count += count;
-    acc[cls.instructor].revenue += classBookings.reduce((sum, b) => sum + b.totalPrice, 0);
+    acc[cls.instructor].revenue += classBookings.reduce((sum, b) => sum + b.classSession.gymflowClass.price, 0);
     return acc;
   }, {} as Record<string, { count: number; revenue: number }>);
 
@@ -327,7 +327,7 @@ export default function AdminPage() {
                     </p>
                   </div>
                   <div className="text-right ml-4">
-                    <p className="font-bold text-gray-900">${booking.totalPrice}</p>
+                    <p className="font-bold text-gray-900">${booking.classSession.gymflowClass.price}</p>
                     <span
                       className={`inline-block px-3 py-1 text-xs font-bold rounded-full ${
                         booking.status === 'CONFIRMED'

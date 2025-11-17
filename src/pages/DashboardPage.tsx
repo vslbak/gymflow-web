@@ -93,7 +93,7 @@ export default function DashboardPage() {
 
     const totalSpent = bookings
         .filter((b) => normalizeStatus(b.status) !== 'CANCELLED')
-        .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+        .reduce((sum, b) => sum + (b.classSession.gymflowClass.price || 0), 0);
 
     const thisMonthBookings = bookings.filter((b) => {
         const bookingDate = getBookingDate(b);
@@ -228,9 +228,9 @@ export default function DashboardPage() {
                                                                 {booking.classSession.gymflowClass.location}
                                                             </div>
                                                         )}
-                                                        {booking.totalPrice !== undefined && (
+                                                        {booking.classSession.gymflowClass.price !== undefined && (
                                                             <div className="flex items-center text-gray-900 font-semibold">
-                                                                Total: ${booking.totalPrice}
+                                                                Total: ${booking.classSession.gymflowClass.price}
                                                             </div>
                                                         )}
                                                         {booking.classSession && (
