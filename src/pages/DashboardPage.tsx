@@ -33,7 +33,7 @@ export default function DashboardPage() {
         };
 
         fetchBookings();
-    }, [user, api]);
+    }, [user]);
 
     const handleCancelClick = (bookingId: string) => {
         setConfirmModal({ isOpen: true, bookingId });
@@ -90,10 +90,6 @@ export default function DashboardPage() {
 
     const pendingBookings = bookings.filter((b) => normalizeStatus(b.status) === 'PENDING');
     const confirmedBookings = bookings.filter((b) => normalizeStatus(b.status) === 'CONFIRMED');
-
-    const totalSpent = bookings
-        .filter((b) => normalizeStatus(b.status) !== 'CANCELLED')
-        .reduce((sum, b) => sum + (b.classSession.gymflowClass.price || 0), 0);
 
     const thisMonthBookings = bookings.filter((b) => {
         const bookingDate = getBookingDate(b);
@@ -216,28 +212,21 @@ export default function DashboardPage() {
                                                             <Calendar className="h-5 w-5 text-orange-600 mr-2" />
                                                             {booking.classSession?.date || booking.bookingDate || 'Date TBD'}
                                                         </div>
-                                                        {booking.classSession?.gymflowClass?.duration && (
-                                                            <div className="flex items-center text-gray-600">
-                                                                <Clock className="h-5 w-5 text-orange-600 mr-2" />
-                                                                {formatDuration(booking.classSession.gymflowClass.duration)}
-                                                            </div>
-                                                        )}
-                                                        {booking.classSession?.gymflowClass?.location && (
-                                                            <div className="flex items-center text-gray-600">
-                                                                <MapPin className="h-5 w-5 text-orange-600 mr-2" />
-                                                                {booking.classSession.gymflowClass.location}
-                                                            </div>
-                                                        )}
-                                                        {booking.classSession.gymflowClass.price !== undefined && (
-                                                            <div className="flex items-center text-gray-900 font-semibold">
-                                                                Total: ${booking.classSession.gymflowClass.price}
-                                                            </div>
-                                                        )}
-                                                        {booking.classSession && (
-                                                            <div className="flex items-center text-gray-600">
+                                                        <div className="flex items-center text-gray-600">
+                                                            <Clock className="h-5 w-5 text-orange-600 mr-2" />
+                                                            {formatDuration(booking.classSession.gymflowClass.duration)}
+                                                        </div>
+                                                        <div className="flex items-center text-gray-600">
+                                                            <MapPin className="h-5 w-5 text-orange-600 mr-2" />
+                                                            {booking.classSession.gymflowClass.location}
+                                                        </div>
+                                                        <div className="flex items-center text-gray-900 font-semibold">
+                                                            Total: ${booking.classSession.gymflowClass.price}
+                                                        </div>
+
+                                                        <div className="flex items-center text-gray-600">
                                                                 Spots Left: {booking.classSession.spotsLeft}
-                                                            </div>
-                                                        )}
+                                                        </div>
                                                     </div>
 
                                                     <div className="flex space-x-4">
