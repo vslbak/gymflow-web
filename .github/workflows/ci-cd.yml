@@ -58,5 +58,5 @@ jobs:
 
       - name: Build and push
         run: |
-          docker build . -t codebshift/gymflow:web --build-arg VITE_API_BASE_URL=https://gymflow.codebshift.dev/api
-          docker push codebshift/gymflow:web
+          docker build . -t vslmpak/gymflow:web --build-arg VITE_API_BASE_URL=https://gymflow.codebshift.dev/api
+          docker push vslmpak/gymflow:web
