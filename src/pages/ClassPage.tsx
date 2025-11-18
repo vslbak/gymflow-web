@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Clock, MapPin, CreditCard, CheckCircle, Calendar, Users, AlertCircle } from 'lucide-react';
-import { api } from '../api/apiFactory';
-import { useData } from '../contexts/DataContext';
-import { useAuth } from '../contexts/AuthContext';
-import type { ClassSession } from '../types';
-import { formatDuration } from '../utils/formatDuration';
+import {useState, useEffect} from 'react';
+import {useParams, Link, useNavigate, useLocation} from 'react-router-dom';
+import {Clock, MapPin, CreditCard, CheckCircle, Calendar, Users, AlertCircle} from 'lucide-react';
+import {api} from '../api/apiFactory';
+import {useData} from '../contexts/DataContext';
+import {useAuth} from '../contexts/AuthContext';
+import type {ClassSession} from '../types';
+import {formatDuration} from '../utils/formatDuration';
 import CalendarComponent from '../components/common/Calendar';
 
 export default function ClassPage() {
-    const { id } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { isAuthenticated } = useAuth();
-    const { getClassById, loading: classesLoading } = useData();
+    const {id} = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const {isAuthenticated} = useAuth();
+    const {getClassById, loading: classesLoading} = useData();
     const classItem = id ? getClassById(id) : undefined;
 
     const [selectedDate, setSelectedDate] = useState<string>('');
@@ -22,9 +22,9 @@ export default function ClassPage() {
     const [availableDates, setAvailableDates] = useState<string[]>([]);
     const [sessionsLoading, setSessionsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-  const [bookingLoading, setBookingLoading] = useState(false);
-  const [bookingError, setBookingError] = useState<string | null>(null);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
+    const [bookingLoading, setBookingLoading] = useState(false);
+    const [bookingError, setBookingError] = useState<string | null>(null);
+    const [bookingSuccess, setBookingSuccess] = useState(false);
 
     useEffect(() => {
         const fetchSessions = async () => {
@@ -114,7 +114,8 @@ export default function ClassPage() {
                     <span className="bg-orange-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
                       {classItem.category}
                     </span>
-                                        <span className="bg-white/90 text-gray-900 px-4 py-1 rounded-full text-sm font-semibold">
+                                        <span
+                                            className="bg-white/90 text-gray-900 px-4 py-1 rounded-full text-sm font-semibold">
                       {classItem.level}
                     </span>
                                     </div>
@@ -137,11 +138,11 @@ export default function ClassPage() {
                                         <div className="mt-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
                                             <p className="text-sm font-semibold text-orange-900">
                                                 Selected: {new Date(selectedDate).toLocaleDateString('en-US', {
-                                                    weekday: 'long',
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                            })}
                                             </p>
                                         </div>
                                     )}
@@ -149,14 +150,14 @@ export default function ClassPage() {
 
                                 <div className="grid md:grid-cols-2 gap-6 mb-8">
                                     <div className="flex items-start space-x-3">
-                                        <Clock className="h-6 w-6 text-orange-600 mt-1" />
+                                        <Clock className="h-6 w-6 text-orange-600 mt-1"/>
                                         <div>
                                             <p className="font-semibold text-gray-900">Duration</p>
                                             <p className="text-gray-600">{formatDuration(classItem.duration)}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start space-x-3">
-                                        <MapPin className="h-6 w-6 text-orange-600 mt-1" />
+                                        <MapPin className="h-6 w-6 text-orange-600 mt-1"/>
                                         <div>
                                             <p className="font-semibold text-gray-900">Location</p>
                                             <p className="text-gray-600">{classItem.location}</p>
@@ -165,14 +166,14 @@ export default function ClassPage() {
                                     {session && (
                                         <>
                                             <div className="flex items-start space-x-3">
-                                                <Calendar className="h-6 w-6 text-orange-600 mt-1" />
+                                                <Calendar className="h-6 w-6 text-orange-600 mt-1"/>
                                                 <div>
                                                     <p className="font-semibold text-gray-900">Time</p>
                                                     <p className="text-gray-600">{session.gymflowClass.classTime}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-start space-x-3">
-                                                <Users className="h-6 w-6 text-orange-600 mt-1" />
+                                                <Users className="h-6 w-6 text-orange-600 mt-1"/>
                                                 <div>
                                                     <p className="font-semibold text-gray-900">Availability</p>
                                                     {session.spotsLeft === 0 ? (
@@ -199,7 +200,7 @@ export default function ClassPage() {
                                         <ul className="space-y-2 text-gray-700">
                                             {classItem.whatToBring.map((item, index) => (
                                                 <li key={index} className="flex items-center">
-                                                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                                                    <CheckCircle className="h-5 w-5 text-green-500 mr-3"/>
                                                     {item}
                                                 </li>
                                             ))}
@@ -230,65 +231,66 @@ export default function ClassPage() {
                                 </div>
                             </div>
 
-              {bookingError && (
-                <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
-                  <AlertCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-red-800">{bookingError}</p>
-                </div>
-              )}
+                            {bookingError && (
+                                <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
+                                    <AlertCircle className="h-5 w-5 text-red-600 mr-2 mt-0.5 flex-shrink-0"/>
+                                    <p className="text-sm text-red-800">{bookingError}</p>
+                                </div>
+                            )}
 
-              {bookingSuccess && (
-                <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-4 flex items-start">
-                  <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-green-800">Booking confirmed successfully!</p>
-                </div>
-              )}
+                            {bookingSuccess && (
+                                <div
+                                    className="mb-4 bg-green-50 border border-green-200 rounded-lg p-4 flex items-start">
+                                    <CheckCircle className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0"/>
+                                    <p className="text-sm text-green-800">Booking confirmed successfully!</p>
+                                </div>
+                            )}
 
                             <button
-                onClick={async () => {
-                  if (!isAuthenticated) {
-                    navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
-                    return;
-                  }
+                                onClick={async () => {
+                                    if (!isAuthenticated) {
+                                        navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
+                                        return;
+                                    }
 
-                  if (!session || !classItem) return;
+                                    if (!session || !classItem) return;
 
-                  setBookingLoading(true);
-                  setBookingError(null);
-                  setBookingSuccess(false);
+                                    setBookingLoading(true);
+                                    setBookingError(null);
+                                    setBookingSuccess(false);
 
-                  try {
-                    const response = await api.createBooking({
-                      classSession: session.id,
-                      className: classItem.name,
-                      amount: classItem.price,
-                    });
+                                    try {
+                                        const response = await api.createBooking({
+                                            classSession: session.id,
+                                            className: classItem.name,
+                                            amount: classItem.price,
+                                        });
 
-                    if (response.success && response.data) {
-                      window.location.href = response.data.url;
-                    } else {
-                      setBookingError(response.error || 'Failed to create booking');
-                    }
-                  } catch (err) {
-                    setBookingError('An error occurred. Please try again.');
-                  } finally {
-                    setBookingLoading(false);
-                  }
-                }}
-                disabled={!session || session.spotsLeft === 0 || bookingLoading || bookingSuccess}
+                                        if (response.success && response.data) {
+                                            window.location.href = response.data.url;
+                                        } else {
+                                            setBookingError("Failed to create booking. Please contact support");
+                                        }
+                                    } catch (err) {
+                                        setBookingError('An error occurred. Please try again.');
+                                    } finally {
+                                        setBookingLoading(false);
+                                    }
+                                }}
+                                disabled={!session || session.spotsLeft === 0 || bookingLoading || bookingSuccess}
                                 className="w-full bg-orange-600 text-white py-4 rounded-lg font-semibold hover:bg-orange-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center space-x-2 mb-4 disabled:bg-gray-400 disabled:cursor-not-allowed"
                             >
-                                <CreditCard className="h-5 w-5" />
+                                <CreditCard className="h-5 w-5"/>
                                 <span>
                   {bookingLoading
-                    ? 'Processing...'
-                    : bookingSuccess
-                    ? 'Booked!'
-                    : !session
-                    ? 'No Session Available'
-                    : session.spotsLeft === 0
-                    ? 'Fully Booked'
-                    : 'Confirm Booking'}
+                      ? 'Processing...'
+                      : bookingSuccess
+                          ? 'Booked!'
+                          : !session
+                              ? 'No Session Available'
+                              : session.spotsLeft === 0
+                                  ? 'Fully Booked'
+                                  : 'Confirm Booking'}
                 </span>
                             </button>
 
