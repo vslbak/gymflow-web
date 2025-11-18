@@ -57,6 +57,8 @@ export interface GymFlowApiContract {
 
   cancelBooking(bookingId: string): Promise<ApiResponse<void>>;
 
+  deleteBooking(bookingId: string): Promise<ApiResponse<void>>;
+
   createClass(request: CreateClassRequest): Promise<ApiResponse<GymFlowClass>>;
 
   updateClass(request: UpdateClassRequest): Promise<ApiResponse<GymFlowClass>>;
