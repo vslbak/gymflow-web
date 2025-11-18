@@ -61,12 +61,12 @@ export default function Navbar() {
                 >
                   Login
                 </Link>
-                <Link
-                  to="/signup"
-                  className="bg-orange-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-orange-700 transition-colors shadow-md hover:shadow-lg"
-                >
-                  Sign Up
-                </Link>
+                {/*<Link*/}
+                {/*  to="/signup"*/}
+                {/*  className="bg-orange-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-orange-700 transition-colors shadow-md hover:shadow-lg"*/}
+                {/*>*/}
+                {/*  Sign Up*/}
+                {/*</Link>*/}
               </>
             )}
           </div>

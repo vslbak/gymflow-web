@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
+import {Lock, ArrowRight, AlertCircle, User} from 'lucide-react';
 import { api } from '../api/apiFactory';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -8,7 +8,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await api.login({ email, password });
+      const response = await api.login({ username, password });
       if (response.success && response.data) {
         login(response.data);
         const redirect = searchParams.get('redirect');
@@ -45,8 +45,8 @@ export default function LoginPage() {
 
           <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800 font-medium mb-1">Test Credentials:</p>
-            <p className="text-sm text-blue-700">Email: admin@gymflow.local</p>
-            <p className="text-sm text-blue-700">Password: admin123</p>
+            <p className="text-sm text-blue-700">Username: JohnDoe</p>
+            <p className="text-sm text-blue-700">Password: user123</p>
           </div>
 
           {error && (
@@ -58,18 +58,18 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                Username
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="you@example.com"
+                  placeholder="your username ... "
                   required
                 />
               </div>

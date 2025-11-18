@@ -8,7 +8,7 @@ import ClassesPreview from './components/classes/ClassesPreview';
 import Footer from './components/layout/Footer';
 import ClassesPage from './pages/ClassesPage';
 import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
+// import SignupPage from './pages/SignupPage';
 import ClassPage from './pages/ClassPage';
 import DashboardPage from './pages/DashboardPage';
 import BookingSuccessPage from './pages/BookingSuccessPage';
@@ -34,7 +34,7 @@ function App() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/classes" element={<ClassesPage />} />
                         <Route path="/login" element={<LoginPage />} />
-                        <Route path="/signup" element={<SignupPage />} />
+                        {/*<Route path="/signup" element={<SignupPage />} />*/}
                         <Route path="/class/:id" element={<ClassPage />} />
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/classes/manage" element={<AdminDashboardLayout />} />
