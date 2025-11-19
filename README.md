@@ -28,6 +28,9 @@ Stripe test card number: `4242 4242 4242 4242` with any future date and any CVC.
 - Mock API for FE-only dev
 - Http API client implementation
 
+## Future improvements
+- Google SSO
+- "Remember me" option
 ## Local Development
 ```
 npm install
