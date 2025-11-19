@@ -173,7 +173,7 @@ export class GymFlowApi implements GymFlowApiContract {
   }
 
   async cancelBooking(bookingId: string): Promise<ApiResponse<void>> {
-    return this.request<void>(`booking/user/bookings/${bookingId}/cancel`, {
+    return this.request<void>(`/booking/user/bookings/${bookingId}/cancel`, {
       method: 'PUT',
     });
   }
